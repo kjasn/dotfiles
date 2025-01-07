@@ -1,0 +1,6 @@
+# .gitignore
+.DS_Store
+*.log
+*.swp
+.netrwhist
+.zsh_history

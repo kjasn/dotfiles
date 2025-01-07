@@ -1,2 +1,3 @@
-# dotfile
-My dotfile about Linux(Ubuntu).
+# dotfiles
+
+My dotfiles about Linux(Ubuntu).
