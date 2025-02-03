@@ -1,0 +1,22 @@
+return {
+  --   {
+  --     "kyazdani42/nvim-tree.lua",
+  --     dependencies = {
+  --       "nvim-tree/nvim-web-devicons",
+  --     },
+  --     config = function()
+  --       require("nvim-tree").setup({
+  --         filters = {
+  --           dotfiles = false, -- 默认显示隐藏文件
+  --           custom = { ".git", "node_modules", "__pycache__" }, -- 添加其他要隐藏的文件或文件夹
+  --         },
+  --         -- 其他配置选项，例如窗口选项等
+  --         view = {
+  --           adaptive_size = true,
+  --           side = "left",
+  --           preserve_window_proportions = true,
+  --         },
+  --       })
+  --     end,
+  --   },
+}
