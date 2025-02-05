@@ -10,6 +10,12 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+# export http_proxy="http://192.168.31.158:7897"
+# export https_proxy="http://192.168.31.158:7897"
+
+# ***** FlClash ********
+# export http_proxy="http://192.168.10.20:7890"
+# export http_proxy="http://192.168.10.20:7890"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -111,6 +117,19 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias rmnm="rm node_modules -rf"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# pnpm
+export PNPM_HOME="/usr/local/bin/pnpm-global"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+# ******  nvim ******
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+alias vim=nvim
+
