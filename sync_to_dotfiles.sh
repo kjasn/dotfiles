@@ -8,7 +8,7 @@ declare -A FILES_TO_SYNC=(
   ["~/.zshrc"]="$DOTFILES_DIR/shell/.zshrc"
   ["~/.gitconfig"]="$DOTFILES_DIR/git/.gitconfig"
   ["~/.tmux.conf"]="$DOTFILES_DIR/tmux/.tmux.conf"
-  ["~/.config/nvim"]="$DOTFILES_DIR/nvim"
+  ["~/.config/nvim"]="$DOTFILES_DIR"
 )
 
 # 遍历每个文件并同步到 dotfiles 目录中
