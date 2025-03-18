@@ -2,7 +2,7 @@
 	defaultBranch = main
 [user]
 	name = Kjasn
-	email = iz.kjasn@qq.com
+	email = iz.kjasn@icloud.com
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

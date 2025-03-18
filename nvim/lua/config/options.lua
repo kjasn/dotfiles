@@ -2,8 +2,17 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
--- local opt = vim.opt
--- opt.tabstop = 4       -- 1个Tab显示为4空格
--- opt.shiftwidth = 4    -- 自动缩进时每级4空格
--- opt.softtabstop = 4   -- 退格键删除缩进时按4空格处理
--- opt.expandtab = true  -- 将Tab转换为空格
+local opt = vim.opt
+opt.tabstop = 4 --  set tab as 4 spaces
+opt.shiftwidth = 4 -- 4 spaces indent
+opt.softtabstop = 4 -- delete 4 spaces each backspace
+opt.expandtab = true -- tab show as spaces
+
+-- 基本选项
+-- vim.o.number = true
+-- vim.o.relativenumber = true
+
+-- 解决中文乱码
+-- vim.o.encoding = "utf-8"
+-- vim.o.fileencoding = "utf-8"
+-- vim.o.termencoding = "utf-8"
