@@ -16,10 +16,10 @@ map.set({ "n", "i" }, "<A-\\>", "<Cmd>ToggleTerm size=50 direction=vertical<CR>"
 
 -- live_grep_args
 map.set(
-  "n",
-  "<leader>/",
-  ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
-  { desc = "Live Grep With Args" }
+    "n",
+    "<leader>/",
+    ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+    { desc = "Live Grep With Args" }
 )
 
 map.set({ "n", "i", "v" }, "<C-a>", "ggyG", opt)
@@ -34,7 +34,7 @@ map.set({ "n", "i", "v" }, "<C-w>", ":bd<CR>", opt)
 -- map.del("n", "<C-j>")
 -- map.del("n", "<C-k>")
 -- map.del("n", "<C-l>")
-map.set('n', '<C-h>', ':TmuxNavigateLeft<CR>', opt)
-map.set('n', '<C-j>', ':TmuxNavigateDown<CR>', opt)
-map.set('n', '<C-k>', ':TmuxNavigateUp<CR>', opt)
-map.set('n', '<C-l>', ':TmuxNavigateRight<CR>', opt)
+map.set("n", "<C-h>", ":TmuxNavigateLeft<CR>", opt)
+map.set("n", "<C-j>", ":TmuxNavigateDown<CR>", opt)
+map.set("n", "<C-k>", ":TmuxNavigateUp<CR>", opt)
+map.set("n", "<C-l>", ":TmuxNavigateRight<CR>", opt)

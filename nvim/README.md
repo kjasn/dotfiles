@@ -6,4 +6,5 @@ Refer to the [documentation](https://lazyvim.github.io/installation) to get star
 # Customizations
 
 1. Add keymap in `lua/config/keymaps.lua`
-2. Add plugins in `/lua/plugins/*` (Replace `neo-tree` with `mini-tree`)
+2. Add plugins in `./lua/plugins/*` (Replace `neo-tree` with `mini-tree`)
+3. Add prettier as default lsp, eslint as default formatting. `./lua/plugins/null-ls.lua`

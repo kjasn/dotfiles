@@ -118,6 +118,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias rmnm="rm node_modules -rf"
+alias cls="clear"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -133,3 +134,10 @@ esac
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 alias vim=nvim
 
+# go
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=$HOME/.go
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
