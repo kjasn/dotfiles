@@ -2,7 +2,21 @@ return {
     "hrsh7th/cmp-cmdline",
     config = function()
         local cmp = require("cmp")
-        -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+
+        -- config for editor
+        cmp.setup({
+            mapping = {
+                ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+                ["<Up>"] = cmp.mapping.select_prev_item(),
+                ["<Down>"] = cmp.mapping.select_next_item(),
+
+                ["<CR>"] = cmp.mapping(function(fallback)
+                    fallback()
+                end),
+            },
+        })
+
+        -- config for cmd line
         cmp.setup.cmdline(":", {
             mapping = cmp.mapping.preset.cmdline({
                 ["<CR>"] = {
