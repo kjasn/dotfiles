@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# [Deprecated]: Warning: This script is deprecated and will be removed in future versions.
+
 set -e                  # 如果有错误则退出脚本
 DOTFILES_DIR=~/dotfiles # dotfiles 目录路径
 
