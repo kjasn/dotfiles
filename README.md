@@ -1,3 +1,4 @@
 # dotfiles
 
-My dotfiles about Linux(Ubuntu).
+My `dotfiles` about MacOS.
+`dotfiles` for other OS, refer to other branches.

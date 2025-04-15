@@ -6,3 +6,6 @@ ln -sf ~/dotfiles/shell/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/git/.gitconfig ~/.gitconfig
 ln -sf ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/nvim ~/.config/nvim
+
+sudo cp ~/dotfiles/git/sync_upstream.sh /usr/local/bin/git-sync
+sudo chmod +x /usr/local/bin/git-sync
