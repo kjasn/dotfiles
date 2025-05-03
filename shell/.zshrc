@@ -117,7 +117,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias rmnm="rm node_modules -rf"
+alias rmnm="rm -rf node_modules"
 alias cls="clear"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -150,3 +150,6 @@ export PATH="/usr/local/opt/python/libexec/bin:$PATH"
 
 # VSCode
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+# Added by Windsurf
+export PATH="/Users/kjasn/.codeium/windsurf/bin:$PATH"
