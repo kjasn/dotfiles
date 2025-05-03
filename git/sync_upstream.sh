@@ -9,9 +9,10 @@ NC='\033[0m'
 
 # 检查参数
 if [[ "$1" != "master" && "$1" != "main" ]]; then
-    echo "${RED}✗ 错误：只支持同步 master/main 分支${NC}"
-    echo "用法: ${BLUE}sync_upstream.sh [master|main]${NC}"
-    exit 1
+    # echo "${RED}✗ 错误：只支持同步 master/main 分支${NC}"
+    # echo "用法: ${BLUE}sync_upstream.sh [master|main]${NC}"
+    # exit 1
+    echo "${YELLOW}! 要同步的分支不是 master/main 分支${NC}"
 fi
 
 branch="$1"
