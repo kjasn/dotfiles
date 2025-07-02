@@ -13,7 +13,7 @@
 ├── uninstall.sh    # 卸载脚本（还原符号链接 / 可选）
 ├── shell/          # Zsh 相关配置（.zshrc 等）
 ├── nvim/           # LazyVim 配置（init.lua / lua/*）
-├── git/            # Git 配置与脚本（.gitconfig / sync_upstream.sh）
+├── git/            # Git 配置与脚本（.gitconfig / git-sync.sh）
 ├── tmux/           # Tmux 配置（.tmux.conf）
 └── …
 ```
@@ -26,7 +26,7 @@
 4. **Zim 框架**：自动写入 `/etc/shells` 并切换默认 Shell。
 5. **LazyVim**：`nvim --headless "+Lazy! sync"` 同步全部插件。
 6. **可选 nvm**：安装前询问是否需要 Node Version Manager。
-7. **git-sync**：自定义脚本安装到 `/usr/local/bin/git-sync`。
+7. **可选 git-sync**：安装自定义的 git-sync 脚本到 `/usr/local/bin/git-sync`。
 8. **彩色输出 & 错误检测**：步骤清晰、出错即停 (`set -e`)。
 
 ---
@@ -50,16 +50,9 @@ bash install.sh
 4. 创建所有符号链接；
 5. 安装 Zim & 切换默认 Shell；
 6. 同步 LazyVim 插件；
-7. 安装 git-sync 工具。
+7. 询问并按需安装 git-sync 工具。
 
 脚本具备**幂等性**，可在更新 dotfiles 后 **重复执行** 以刷新符号链接或升级依赖。
-
-### 静默 / 非交互
-目前仅 nvm 步骤需要确认，若希望完全无人值守可预设环境变量：
-
-```bash
-export DOTFILES_AUTO_YES=1  # TODO: 后续支持
-```
 
 ---
 
@@ -75,16 +68,16 @@ bash uninstall.sh
 
 ## 自定义
 
-- 修改 `shell/.zshrc` 可追加 alias / export；
-- `nvim/` 目录完全兼容 LazyVim，插件放入 `lua/plugins/*`；
-- Git / Tmux 同理，自由编辑后重新执行 `install.sh` 软链生效。
+-   修改 `shell/.zshrc` 可追加 alias / export；
+-   `nvim/` 目录完全兼容 LazyVim，插件放入 `lua/plugins/*`；
+-   Git / Tmux 同理，自由编辑后重新执行 `install.sh` 软链生效。
 
 ---
 
 ## TODO
 
-- [ ] MacOS 分支完善
-- [ ] 字体与美化脚本
-- [ ] 自动安装 LSP / DAP / Mason Packages
+-   [ ] MacOS 分支完善
+-   [ ] 字体与美化脚本
+-   [ ] 自动安装 LSP / DAP / Mason Packages
 
 ---
