@@ -7,6 +7,8 @@ opt.tabstop = 4 --  set tab as 4 spaces
 opt.shiftwidth = 4 -- 4 spaces indent
 opt.softtabstop = 4 -- delete 4 spaces each backspace
 opt.expandtab = true -- tab show as spaces
+opt.wrap = true
+opt.linebreak = true
 
 -- 基本选项
 -- vim.o.number = true
