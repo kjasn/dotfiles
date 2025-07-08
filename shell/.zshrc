@@ -158,6 +158,4 @@ export NVM_DIR="$HOME/.nvm"
 
 # Protoc
 export PATH="$PATH:$HOME/.local/bin"
-export PATH=$PATH:/home/kjasn/.go/bin
-# <<< conda initialize <<<
-
+export PATH=$PATH:$HOME/.go/bin
