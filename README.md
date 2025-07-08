@@ -68,9 +68,21 @@ bash uninstall.sh
 
 ## 自定义
 
--   修改 `shell/.zshrc` 可追加 alias / export；
--   `nvim/` 目录完全兼容 LazyVim，插件放入 `lua/plugins/*`；
--   Git / Tmux 同理，自由编辑后重新执行 `install.sh` 软链生效。
+### Lazyvim
+
+默认使用系统剪贴板，`yy`，`dd`等行为都会复制内容到系统剪切板（打开系统剪贴板可能看不到复制的内容），`p` 会粘贴到光标所在位置，此功能依赖 `xclip` 工具，脚本默认安装，如果不需要，在 `nvim/lua/config/options.lua` 中注释掉以下配置
+
+```lua
+vim.opt.clipboard = "unnamedplus"
+```
+
+### Tmux
+
+默认使用 ctrl+a 作为前缀，如果不需要，在 `tmux/.tmux.conf` 中注释掉以下配置
+
+```bash
+set -g prefix C-a
+```
 
 ---
 
