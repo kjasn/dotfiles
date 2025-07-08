@@ -58,7 +58,7 @@ install_prerequisites() {
   fi
 
   # 安装 zsh、curl、fzf 基础环境
-  sudo apt install -y zsh curl fzf neovim
+  sudo apt install -y zsh curl fzf neovim xclip
 
   # 安装 C 编译器 (gcc) 或 clang
   if ! command -v gcc >/dev/null 2>&1 && ! command -v clang >/dev/null 2>&1; then
