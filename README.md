@@ -13,7 +13,7 @@
 ├── uninstall.sh    # 卸载脚本（还原符号链接 / 可选）
 ├── shell/          # Zsh 相关配置（.zshrc 等）
 ├── nvim/           # LazyVim 配置（init.lua / lua/*）
-├── git/            # Git 配置与脚本（.gitconfig / git-sync.sh）
+├── git/            # Git 配置与脚本（git-sync.sh）
 ├── tmux/           # Tmux 配置（.tmux.conf）
 └── …
 ```
@@ -35,7 +35,7 @@
 
 ```bash
 # 克隆仓库（或自行置于 ~/dotfiles）
-git clone https://github.com/yourname/dotfiles.git ~/dotfiles
+git clone https://github.com/kjasn/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # 运行安装脚本
