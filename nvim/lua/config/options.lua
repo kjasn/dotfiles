@@ -10,6 +10,9 @@ opt.expandtab = true -- tab show as spaces
 opt.wrap = true
 opt.linebreak = true
 
+-- set clipboard system clipboard
+vim.opt.clipboard = "unnamedplus"
+
 -- 基本选项
 -- vim.o.number = true
 -- vim.o.relativenumber = true
