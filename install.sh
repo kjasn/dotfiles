@@ -58,7 +58,7 @@ install_prerequisites() {
   fi
 
   # 安装 zsh、curl、fzf 基础环境
-  sudo apt install -y zsh curl fzf
+  sudo apt install -y zsh curl fzf neovim
 
   # 安装 C 编译器 (gcc) 或 clang
   if ! command -v gcc >/dev/null 2>&1 && ! command -v clang >/dev/null 2>&1; then
@@ -161,6 +161,65 @@ install_nvm() {
   esac
 }
 
+# 安装 Tmux 插件
+install_tmux_plugins() {
+  echo -e "\n${GREEN}=== 安装 Tmux 插件 (tpm) ===${NC}"
+
+  # 检查 tpm 是否已克隆
+  local tpm_path="$HOME/.tmux/plugins/tpm"
+  if [ ! -d "$tpm_path" ]; then
+    echo -e "${GREEN}正在克隆 Tmux Plugin Manager (tpm)...${NC}"
+    if ! git clone https://github.com/tmux-plugins/tpm "$tpm_path"; then
+      echo -e "${RED}tpm 克隆失败，请检查网络或 Git。${NC}"
+      return 1
+    fi
+  else
+    echo -e "${YELLOW}检测到 tpm 已安装，跳过克隆。${NC}"
+  fi
+
+  # 执行 tpm 的插件安装脚本
+  # 这会读取 ~/.tmux.conf 并安装其中列出的插件
+  local install_script="$tpm_path/bin/install_plugins"
+  if [ -f "$install_script" ]; then
+    echo -e "${GREEN}开始安装/更新 Tmux 插件...${NC}"
+    if "$install_script"; then
+      echo -e "${GREEN}Tmux 插件安装/更新完成。${NC}"
+    else
+      echo -e "${RED}Tmux 插件安装失败。${NC}"
+    fi
+  else
+    echo -e "${RED}错误：找不到 tpm 的安装脚本。${NC}"
+  fi
+}
+
+# 可选安装 git-sync
+install_git_sync() {
+  echo -e "\n${GREEN}=== 可选：安装 git-sync 工具 ===${NC}"
+
+  read -r -p "是否安装 git-sync (一个用于同步上游仓库的脚本)? [y/N] " yn
+  case "$yn" in
+    [Yy]* )
+      echo -e "${GREEN}开始安装 git-sync...${NC}"
+      local source_script="$HOME/dotfiles/git/git-sync.sh"
+      local target_bin="/usr/local/bin/git-sync"
+
+      if [ ! -f "$source_script" ]; then
+          echo -e "${RED}错误: 找不到源文件 ${source_script}${NC}"
+          return 1
+      fi
+
+      if sudo cp "$source_script" "$target_bin" && sudo chmod +x "$target_bin"; then
+        echo -e "${GREEN}成功安装 git-sync 到 ${target_bin}${NC}"
+      else
+        echo -e "${RED}错误：git-sync 安装失败${NC}"
+      fi
+      ;;
+    * )
+      echo -e "${YELLOW}已跳过 git-sync 安装${NC}"
+      ;;
+  esac
+}
+
 # 主安装流程
 main() {
   echo -e "\n${GREEN}=== 开始安装 dotfiles ===${NC}"
@@ -180,18 +239,14 @@ main() {
   create_symlink "$HOME/dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
   create_symlink "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
 
+  # 安装 Tmux 插件
+  install_tmux_plugins
+
   # 安装/更新 LazyVim
   install_lazyvim
 
   # 安装 git-sync 工具
-  echo -e "\n${GREEN}=== 安装 git-sync 工具 ===${NC}"
-  if sudo cp "$HOME/dotfiles/git/sync_upstream.sh" /usr/local/bin/git-sync &&
-    sudo chmod +x /usr/local/bin/git-sync; then
-    echo -e "${GREEN}成功安装 git-sync 到 /usr/local/bin/${NC}"
-  else
-    echo -e "${RED}错误：git-sync 安装失败${NC}"
-    return 1
-  fi
+  install_git_sync
 
   echo -e "\n${GREEN}=== 安装完成 ===${NC}"
 }
