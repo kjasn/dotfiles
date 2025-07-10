@@ -129,9 +129,6 @@ unset key
 # }}} End configuration added by Zim install
 
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source ~/fzf.zsh
-
 # Alias
 alias rmnm="rm -rf node_modules"
 alias cls="clear"
@@ -147,6 +144,11 @@ alias sz="source ~/.zshrc"
 #   *) export PATH="$PNPM_HOME:$PATH" ;;
 # esac
 # pnpm end
+
+# User configuration
+export EDITOR='nvim'
+# export VISUAL='nvim'
+export PATH="/usr/local/bin:$PATH"
 
 # nvim
 # export PATH="$PATH:/opt/nvim-linux-x86_64/bin"

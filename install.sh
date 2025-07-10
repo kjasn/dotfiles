@@ -235,6 +235,7 @@ main() {
 
   # 创建符号链接
   create_symlink "$HOME/dotfiles/shell/.zshrc" "$HOME/.zshrc"
+  create_symlink "$HOME/dotfiles/shell/.zimrc" "$HOME/.zimrc"
   create_symlink "$HOME/dotfiles/git/.gitconfig" "$HOME/.gitconfig"
   create_symlink "$HOME/dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
   create_symlink "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
