@@ -57,8 +57,8 @@ install_prerequisites() {
     sudo apt install -y git
   fi
 
-  # 安装 zsh、curl、fzf 基础环境
-  sudo apt install -y zsh curl fzf neovim xclip
+  # 安装 zsh、curl、fzf、tmux 基础环境
+  sudo apt install -y zsh curl fzf neovim xclip tmux
 
   # 安装 C 编译器 (gcc) 或 clang
   if ! command -v gcc >/dev/null 2>&1 && ! command -v clang >/dev/null 2>&1; then
@@ -240,7 +240,7 @@ main() {
   create_symlink "$HOME/dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
   create_symlink "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
 
-  # 安装 Tmux 插件
+  # 安装 Tmux 插件（必须在创建 .tmux.conf 链接之后）
   install_tmux_plugins
 
   # 安装/更新 LazyVim
