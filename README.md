@@ -84,7 +84,9 @@ vim.opt.clipboard = "unnamedplus"
 set -g prefix C-a
 ```
 
----
+### Script
+
+该目录下为一些可选的脚本。将其放到 `/usr/local/bin` 或 `~/.local/bin` 下，并赋予执行权限即可全局使用。
 
 ## TODO
 
