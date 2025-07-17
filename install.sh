@@ -73,8 +73,36 @@ install_prerequisites() {
   fi
 
   # 安装最新版 Neovim
+  local should_install_nvim=false
+  
   if ! command -v nvim >/dev/null 2>&1; then
     echo -e "${YELLOW}Neovim 未安装，正在下载最新版...${NC}"
+    should_install_nvim=true
+  else
+    # 检查当前版本
+    local current_version
+    current_version=$(nvim --version | head -n1 | grep -o 'v[0-9]\+\.[0-9]\+' | head -n1)
+    echo -e "${YELLOW}检测到 Neovim 版本: ${current_version}${NC}"
+    
+    # 检查是否为旧版本（小于 0.10.0）
+    if [[ "$current_version" < "v0.10" ]]; then
+      echo -e "${YELLOW}检测到较旧版本的 Neovim${NC}"
+      read -r -p "是否安装最新版 Neovim? [Y/n] " yn
+      case "$yn" in
+        [Nn]* )
+          echo -e "${YELLOW}跳过 Neovim 更新${NC}"
+          ;;
+        * )
+          echo -e "${GREEN}开始安装最新版 Neovim...${NC}"
+          should_install_nvim=true
+          ;;
+      esac
+    else
+      echo -e "${GREEN}Neovim 版本已是最新，跳过安装${NC}"
+    fi
+  fi
+  
+  if [ "$should_install_nvim" = true ]; then
     temp_dir=$(mktemp -d)
     cd "$temp_dir"
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
@@ -84,6 +112,7 @@ install_prerequisites() {
     sudo ln -sf /opt/nvim*/bin/nvim /usr/local/bin/nvim
     cd - >/dev/null 2>&1
     rm -rf "$temp_dir"
+    echo -e "${GREEN}Neovim 安装完成${NC}"
   fi
 }
 
