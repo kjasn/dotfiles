@@ -226,34 +226,6 @@ install_tmux_plugins() {
   fi
 }
 
-# 可选安装 git-sync
-install_git_sync() {
-  echo -e "\n${GREEN}=== 可选：安装 git-sync 工具 ===${NC}"
-
-  read -r -p "是否安装 git-sync (一个用于同步上游仓库的脚本)? [y/N] " yn
-  case "$yn" in
-    [Yy]* )
-      echo -e "${GREEN}开始安装 git-sync...${NC}"
-      local source_script="$HOME/dotfiles/git/git-sync.sh"
-      local target_bin="/usr/local/bin/git-sync"
-
-      if [ ! -f "$source_script" ]; then
-          echo -e "${RED}错误: 找不到源文件 ${source_script}${NC}"
-          return 1
-      fi
-
-      if sudo cp "$source_script" "$target_bin" && sudo chmod +x "$target_bin"; then
-        echo -e "${GREEN}成功安装 git-sync 到 ${target_bin}${NC}"
-      else
-        echo -e "${RED}错误：git-sync 安装失败${NC}"
-      fi
-      ;;
-    * )
-      echo -e "${YELLOW}已跳过 git-sync 安装${NC}"
-      ;;
-  esac
-}
-
 # 主安装流程
 main() {
   echo -e "\n${GREEN}=== 开始安装 dotfiles ===${NC}"
@@ -279,9 +251,6 @@ main() {
 
   # 安装/更新 LazyVim
   install_lazyvim
-
-  # 安装 git-sync 工具
-  install_git_sync
 
   echo -e "\n${GREEN}=== 安装完成 ===${NC}"
 }
