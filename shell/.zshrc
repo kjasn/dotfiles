@@ -133,25 +133,13 @@ unset key
 alias rmnm="rm -rf node_modules"
 alias cls="clear"
 alias vim=nvim
-alias sz="source ~/.zshrc"
-
-# pnpm
-# export PNPM_HOME="$HOME/.pnpm-global"
-# export PATH="$PNPM_HOME:$PATH"
-# export PNPM_HOME="/usr/local/bin/pnpm-global"
-# case ":$PATH:" in
-#   *":$PNPM_HOME:"*) ;;
-#   *) export PATH="$PNPM_HOME:$PATH" ;;
-# esac
-# pnpm end
+alias ez="exec zsh"
 
 # User configuration
 export EDITOR='nvim'
 # export VISUAL='nvim'
 export PATH="/usr/local/bin:$PATH"
 
-# nvim
-# export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # go
 export PATH=$PATH:/usr/local/go/bin
@@ -184,3 +172,6 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda-12.1/lib64
 # Protoc
 export PATH="$PATH:$HOME/.local/bin"
 export PATH=$PATH:$HOME/.go/bin
+
+# zoxide - smart cd command
+eval "$(zoxide init zsh)"
