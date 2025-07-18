@@ -57,7 +57,7 @@ zmodule zsh-users/zsh-history-substring-search
 zmodule zsh-users/zsh-autosuggestions
 # }}} End configuration added by Zim install
 # zmodule agkozak/zsh-z  # Replaced by zoxide, a faster alternative
-zmodule zsh-users/zsh-zoxide
+# zmodule ajeetdsouza/zoxide  
 zmodule Aloxaf/fzf-tab
 
 # Theme

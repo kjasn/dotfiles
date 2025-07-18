@@ -72,37 +72,40 @@ install_prerequisites() {
     sudo ln -sf "$(command -v fdfind)" /usr/local/bin/fd
   fi
 
+  # 安装 zoxide (智能 cd 命令)
+  if ! command -v zoxide >/dev/null 2>&1; then
+    echo -e "${YELLOW}zoxide 未安装，正在安装...${NC}"
+    if curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash; then
+      echo -e "${GREEN}zoxide 安装完成${NC}"
+    else
+      echo -e "${RED}zoxide 安装失败，请检查网络连接${NC}"
+    fi
+  else
+    echo -e "${YELLOW}检测到 zoxide 已安装，跳过安装${NC}"
+  fi
+
   # 安装最新版 Neovim
   local should_install_nvim=false
   
   if ! command -v nvim >/dev/null 2>&1; then
     echo -e "${YELLOW}Neovim 未安装，正在下载最新版...${NC}"
-    should_install_nvim=true
+    install_neovim=true
   else
-    # 检查当前版本
-    local current_version
-    current_version=$(nvim --version | head -n1 | grep -o 'v[0-9]\+\.[0-9]\+' | head -n1)
-    echo -e "${YELLOW}检测到 Neovim 版本: ${current_version}${NC}"
-    
-    # 检查是否为旧版本（小于 0.10.0）
-    if [[ "$current_version" < "v0.10" ]]; then
-      echo -e "${YELLOW}检测到较旧版本的 Neovim${NC}"
-      read -r -p "是否安装最新版 Neovim? [Y/n] " yn
-      case "$yn" in
-        [Nn]* )
-          echo -e "${YELLOW}跳过 Neovim 更新${NC}"
-          ;;
-        * )
-          echo -e "${GREEN}开始安装最新版 Neovim...${NC}"
-          should_install_nvim=true
-          ;;
-      esac
+    # 检查当前 Neovim 版本
+    current_version=$(nvim --version | head -n1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+')
+    echo -e "${BLUE}当前 Neovim 版本: ${current_version}${NC}"
+    echo -e "${YELLOW}是否要安装/升级到最新版本的 Neovim? (y/n)${NC}"
+    read -r response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+      install_neovim=true
     else
-      echo -e "${GREEN}Neovim 版本已是最新，跳过安装${NC}"
+      install_neovim=false
+      echo -e "${GREEN}跳过 Neovim 安装${NC}"
     fi
   fi
-  
-  if [ "$should_install_nvim" = true ]; then
+
+  if [ "$install_neovim" = true ]; then
+    echo -e "${YELLOW}正在下载最新版 Neovim...${NC}"
     temp_dir=$(mktemp -d)
     cd "$temp_dir"
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
@@ -119,10 +122,12 @@ install_prerequisites() {
 # 安装（或更新）LazyVim 插件集
 install_lazyvim() {
   echo -e "\n${GREEN}=== 安装/更新 LazyVim 插件 ===${NC}"
-  if nvim --headless "+Lazy! sync" +qa; then
+  echo -e "${YELLOW}正在后台安装 LazyVim 插件，请稍候...${NC}"
+  if nvim --headless "+Lazy! sync" +qa >/dev/null 2>&1; then
     echo -e "${GREEN}LazyVim 插件安装/更新完成${NC}"
   else
-    echo -e "${RED}LazyVim 插件安装失败，请检查上述日志${NC}"
+    echo -e "${RED}LazyVim 插件安装失败${NC}"
+    echo -e "${YELLOW}如需查看详细错误信息，请手动运行: nvim --headless \"+Lazy! sync\" +qa${NC}"
   fi
 }
 
