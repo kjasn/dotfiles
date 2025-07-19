@@ -61,7 +61,12 @@ bash install.sh
 ### 可选安装
 
 -   nvm (Node Version Manager)
--   git-sync 工具
+
+### 实用脚本
+
+-   **git-sync.sh**: Git 上游同步脚本，用于同步 fork 仓库的上游更新
+    -   使用方法: `./scripts/git-sync.sh [master|main]`
+    -   如需全局使用，可复制到 `/usr/local/bin/` 目录
 
 ---
 
@@ -74,6 +79,8 @@ bash install.sh
 ├── nvim/           # LazyVim 配置
 ├── git/            # Git 配置
 ├── tmux/           # Tmux 配置
+├── scripts/        # 实用脚本
+│   └── git-sync.sh # Git 上游同步脚本
 └── README.md       # 说明文档
 ```
 
@@ -160,6 +167,30 @@ alias ll="ls -la"
 set -g prefix C-b
 ```
 
+## 📜 脚本使用
+
+### git-sync.sh
+
+用于同步 fork 仓库的上游更新：
+
+```bash
+# 在 dotfiles 目录中使用
+./scripts/git-sync.sh main
+
+# 如需全局使用，复制到系统路径
+sudo cp scripts/git-sync.sh /usr/local/bin/git-sync
+sudo chmod +x /usr/local/bin/git-sync
+
+# 然后在任何 Git 仓库中使用
+git-sync main
+```
+
+**使用前准备**：
+
+1. 确保已配置 upstream 远程仓库：`git remote add upstream <原仓库URL>`
+2. 脚本会自动备份当前分支状态
+3. 支持 master 和 main 分支
+
 ---
 
 ## 🐛 故障排除
@@ -200,15 +231,3 @@ nvim --headless "+Lazy! sync" +qa
     -   集成 Homebrew 包管理
     -   添加 Maple Mono NF CN 字体
     -   优化 Mac 用户快捷键
-
----
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
----
-
-## �� 许可证
-
-MIT License

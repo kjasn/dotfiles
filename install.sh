@@ -143,6 +143,8 @@ install_prerequisites() {
   fi
 
   # 安装最新版 Neovim
+  local should_install_nvim=false
+  
   if ! command -v nvim >/dev/null 2>&1; then
     echo -e "${YELLOW}Neovim 未安装，正在下载最新版...${NC}"
     install_neovim=true
@@ -164,11 +166,24 @@ install_prerequisites() {
     echo -e "${YELLOW}正在下载最新版 Neovim...${NC}"
     temp_dir=$(mktemp -d)
     cd "$temp_dir"
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-macos-x86_64.tar.gz
-    sudo rm -rf /opt/nvim
-    sudo tar -C /opt -xzf nvim-macos-x86_64.tar.gz
-    # 建立可执行链接
-    sudo ln -sf /opt/nvim-macos-x86_64/bin/nvim /usr/local/bin/nvim
+    
+    # 根据架构选择正确的版本
+    if [[ $(uname -m) == "arm64" ]]; then
+      # Apple Silicon Mac
+      curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-macos-arm64.tar.gz
+      sudo rm -rf /opt/nvim
+      sudo tar -C /opt -xzf nvim-macos-arm64.tar.gz
+      # 建立可执行链接，容错处理路径变动
+      sudo ln -sf /opt/nvim-macos-arm64/bin/nvim /usr/local/bin/nvim
+    else
+      # Intel Mac
+      curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-macos-x86_64.tar.gz
+      sudo rm -rf /opt/nvim
+      sudo tar -C /opt -xzf nvim-macos-x86_64.tar.gz
+      # 建立可执行链接，容错处理路径变动
+      sudo ln -sf /opt/nvim-macos-x86_64/bin/nvim /usr/local/bin/nvim
+    fi
+    
     cd - >/dev/null 2>&1
     rm -rf "$temp_dir"
     echo -e "${GREEN}Neovim 安装完成${NC}"
@@ -180,9 +195,15 @@ install_fonts() {
   echo -e "\n${GREEN}=== 安装字体 ===${NC}"
   
   # 检查是否已安装 Maple Mono NF CN 字体
-  if fc-list | grep -q "Maple Mono NF CN"; then
+  if fc-list | grep -q "Maple Mono NF CN" 2>/dev/null; then
     echo -e "${YELLOW}Maple Mono NF CN 字体已安装，跳过安装${NC}"
     return 0
+  fi
+
+  # 检查是否安装了 fontconfig
+  if ! command -v fc-list >/dev/null 2>&1; then
+    echo -e "${YELLOW}安装 fontconfig 以支持字体管理...${NC}"
+    brew install fontconfig
   fi
 
   echo -e "${YELLOW}正在安装 Maple Mono NF CN 字体...${NC}"
@@ -197,18 +218,24 @@ install_fonts() {
   
   if curl -L "$font_url" -o "$temp_dir/MapleMono-NF-CN.zip"; then
     cd "$temp_dir"
-    unzip -q MapleMono-NF-CN.zip
-    cp -f *.ttf "$font_dir/"
-    cd - >/dev/null 2>&1
-    rm -rf "$temp_dir"
-    
-    # 刷新字体缓存
-    fc-cache -fv >/dev/null 2>&1 || true
-    
-    echo -e "${GREEN}字体安装完成${NC}"
-    echo -e "${YELLOW}请在终端应用中设置字体为 'Maple Mono NF CN'${NC}"
+    if unzip -q MapleMono-NF-CN.zip; then
+      cp -f *.ttf "$font_dir/" 2>/dev/null || true
+      cd - >/dev/null 2>&1
+      rm -rf "$temp_dir"
+      
+      # 刷新字体缓存
+      fc-cache -fv >/dev/null 2>&1 || true
+      
+      echo -e "${GREEN}字体安装完成${NC}"
+      echo -e "${YELLOW}请在终端应用中设置字体为 'Maple Mono NF CN'${NC}"
+    else
+      echo -e "${RED}字体解压失败${NC}"
+      rm -rf "$temp_dir"
+    fi
   else
-    echo -e "${RED}字体下载失败，请手动安装${NC}"
+    echo -e "${RED}字体下载失败，请检查网络连接${NC}"
+    echo -e "${YELLOW}您可以手动下载字体: ${font_url}${NC}"
+    rm -rf "$temp_dir"
   fi
 }
 
@@ -288,6 +315,37 @@ install_nvm() {
   esac
 }
 
+# 安装 Tmux 插件
+install_tmux_plugins() {
+  echo -e "\n${GREEN}=== 安装 Tmux 插件 (tpm) ===${NC}"
+
+  # 检查 tpm 是否已克隆
+  local tpm_path="$HOME/.tmux/plugins/tpm"
+  if [ ! -d "$tpm_path" ]; then
+    echo -e "${GREEN}正在克隆 Tmux Plugin Manager (tpm)...${NC}"
+    if ! git clone https://github.com/tmux-plugins/tpm "$tpm_path"; then
+      echo -e "${RED}tpm 克隆失败，请检查网络或 Git。${NC}"
+      return 1
+    fi
+  else
+    echo -e "${YELLOW}检测到 tpm 已安装，跳过克隆。${NC}"
+  fi
+
+  # 执行 tpm 的插件安装脚本
+  # 这会读取 ~/.tmux.conf 并安装其中列出的插件
+  local install_script="$tpm_path/bin/install_plugins"
+  if [ -f "$install_script" ]; then
+    echo -e "${GREEN}开始安装/更新 Tmux 插件...${NC}"
+    if "$install_script"; then
+      echo -e "${GREEN}Tmux 插件安装/更新完成。${NC}"
+    else
+      echo -e "${RED}Tmux 插件安装失败。${NC}"
+    fi
+  else
+    echo -e "${RED}错误：找不到 tpm 的安装脚本。${NC}"
+  fi
+}
+
 # 主安装流程
 main() {
   echo -e "\n${GREEN}=== 开始安装 MacOS dotfiles ===${NC}"
@@ -322,16 +380,6 @@ main() {
 
   # 安装/更新 LazyVim
   install_lazyvim
-
-  # 安装 git-sync 工具
-  echo -e "\n${GREEN}=== 安装 git-sync 工具 ===${NC}"
-  if sudo cp "$HOME/dotfiles/git/sync_upstream.sh" /usr/local/bin/git-sync &&
-    sudo chmod +x /usr/local/bin/git-sync; then
-    echo -e "${GREEN}成功安装 git-sync 到 /usr/local/bin/${NC}"
-  else
-    echo -e "${RED}错误：git-sync 安装失败${NC}"
-    return 1
-  fi
 
   echo -e "\n${GREEN}=== 安装完成 ===${NC}"
   echo -e "${YELLOW}请重新启动终端应用并设置字体为 'Maple Mono NF CN'${NC}"
