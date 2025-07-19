@@ -1,3 +1,6 @@
+# 跳过系统级的 compinit，让 Zim 来处理补全初始化
+skip_global_compinit=1
+
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -133,25 +136,23 @@ unset key
 alias rmnm="rm -rf node_modules"
 alias cls="clear"
 alias vim=nvim
-alias sz="source ~/.zshrc"
-
-# pnpm
-# export PNPM_HOME="$HOME/.pnpm-global"
-# export PATH="$PNPM_HOME:$PATH"
-# export PNPM_HOME="/usr/local/bin/pnpm-global"
-# case ":$PATH:" in
-#   *":$PNPM_HOME:"*) ;;
-#   *) export PATH="$PNPM_HOME:$PATH" ;;
-# esac
-# pnpm end
+alias ez="exec zsh"
 
 # User configuration
 export EDITOR='nvim'
 # export VISUAL='nvim'
-export PATH="/usr/local/bin:$PATH"
 
-# nvim
-# export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+# MacOS 环境变量配置
+export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+
+# Homebrew 环境变量
+if [[ $(uname -m) == "arm64" ]]; then
+    # Apple Silicon Mac
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    # Intel Mac
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 # go
 export PATH=$PATH:/usr/local/go/bin
@@ -162,7 +163,24 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
 # Protoc
 export PATH="$PATH:$HOME/.local/bin"
 export PATH=$PATH:$HOME/.go/bin
+
+# zoxide - smart cd command
+eval "$(zoxide init zsh)"
