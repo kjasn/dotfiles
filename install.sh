@@ -212,8 +212,27 @@ install_fonts() {
   local font_dir="$HOME/Library/Fonts"
   mkdir -p "$font_dir"
   
-  # 下载并安装字体
-  local font_url="https://github.com/subframe7536/Maple-font/releases/download/v6.4/MapleMono-NF-CN.zip"
+  # 获取最新版本的字体下载链接
+  echo -e "${YELLOW}正在获取最新版本的 Maple Mono NF CN 字体...${NC}"
+  
+  # 使用 GitHub API 获取最新版本
+  local latest_version=$(curl -s https://api.github.com/repos/subframe7536/Maple-font/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
+  
+  if [ -z "$latest_version" ]; then
+    echo -e "${RED}无法获取最新版本信息，使用默认版本 v6.4${NC}"
+    latest_version="v6.4"
+  else
+    echo -e "${GREEN}获取到最新版本: ${latest_version}${NC}"
+  fi
+  
+  # 检查网络连接
+  if ! curl -s --connect-timeout 5 https://github.com >/dev/null 2>&1; then
+    echo -e "${RED}网络连接失败，无法下载字体${NC}"
+    echo -e "${YELLOW}请检查网络连接后重试${NC}"
+    return 1
+  fi
+  
+  local font_url="https://github.com/subframe7536/Maple-font/releases/download/${latest_version}/MapleMono-NF-CN.zip"
   local temp_dir=$(mktemp -d)
   
   if curl -L "$font_url" -o "$temp_dir/MapleMono-NF-CN.zip"; then
@@ -235,6 +254,7 @@ install_fonts() {
   else
     echo -e "${RED}字体下载失败，请检查网络连接${NC}"
     echo -e "${YELLOW}您可以手动下载字体: ${font_url}${NC}"
+    echo -e "${YELLOW}或访问字体项目页面: https://github.com/subframe7536/Maple-font/releases${NC}"
     rm -rf "$temp_dir"
   fi
 }

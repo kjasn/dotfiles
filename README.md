@@ -67,6 +67,9 @@ bash install.sh
 -   **git-sync.sh**: Git 上游同步脚本，用于同步 fork 仓库的上游更新
     -   使用方法: `./scripts/git-sync.sh [master|main]`
     -   如需全局使用，可复制到 `/usr/local/bin/` 目录
+-   **upload-stage-server.sh**: 服务器文件上传脚本，使用固定 SSH 密钥快速上传文件
+    -   使用方法: `./scripts/upload-stage-server.sh <本地路径> <远程路径>`
+    -   使用前需要配置脚本中的服务器信息和 SSH 密钥路径
 
 ---
 
@@ -80,7 +83,8 @@ bash install.sh
 ├── git/            # Git 配置
 ├── tmux/           # Tmux 配置
 ├── scripts/        # 实用脚本
-│   └── git-sync.sh # Git 上游同步脚本
+│   ├── git-sync.sh # Git 上游同步脚本
+│   └── upload-stage-server.sh # 服务器文件上传脚本
 └── README.md       # 说明文档
 ```
 
@@ -190,6 +194,29 @@ git-sync main
 1. 确保已配置 upstream 远程仓库：`git remote add upstream <原仓库URL>`
 2. 脚本会自动备份当前分支状态
 3. 支持 master 和 main 分支
+
+### upload-stage-server.sh
+
+用于快速上传文件到远程服务器：
+
+```bash
+# 在 dotfiles 目录中使用
+./scripts/upload-stage-server.sh ./my_project /var/www/html/
+
+# 如需全局使用，复制到系统路径
+sudo cp scripts/upload-stage-server.sh /usr/local/bin/upload-stage-server
+sudo chmod +x /usr/local/bin/upload-stage-server
+
+# 然后在任何地方使用
+upload-stage-server ./my_project /var/www/html/
+```
+
+**使用前准备**：
+
+1. 编辑脚本配置服务器信息：`REMOTE_USER`、`REMOTE_HOST`、`REMOTE_PORT`
+2. 配置 SSH 密钥路径：`SSH_KEY_PATH`
+3. 确保 SSH 密钥有访问服务器的权限
+4. 脚本会自动检查远程文件是否存在，避免意外覆盖
 
 ---
 
