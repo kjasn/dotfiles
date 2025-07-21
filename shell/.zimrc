@@ -25,12 +25,9 @@ zmodule archive
 # Prompt
 #
 
-# Exposes to prompts how long the last command took to execute, used by asciiship.
-zmodule duration-info
-# Exposes git repository status information to prompts, used by asciiship.
-zmodule git-info
-# A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
-zmodule asciiship
+# zmodule duration-info
+# zmodule git-info  
+# zmodule asciiship
 
 #
 # Completion
@@ -60,5 +57,6 @@ zmodule zsh-users/zsh-autosuggestions
 # zmodule ajeetdsouza/zoxide  
 zmodule Aloxaf/fzf-tab
 
-# Theme
-zmodule bira
+# Theme - PowerLevel10k
+# 使用 PowerLevel10k 主题，功能强大且高度可定制
+zmodule romkatv/powerlevel10k --use degit
