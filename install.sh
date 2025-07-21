@@ -114,9 +114,21 @@ install_homebrew() {
     fi
   else
     echo -e "${GREEN}Homebrew 已安装${NC}"
-    # 更新 Homebrew
-    echo -e "${YELLOW}更新 Homebrew...${NC}"
-    brew update
+    
+    # 获取当前 Homebrew 版本
+    local current_version=$(brew --version | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+    echo -e "${BLUE}当前 Homebrew 版本: ${current_version}${NC}"
+    
+    # 询问用户是否更新
+    echo -e "${YELLOW}是否要更新 Homebrew? (y/n)${NC}"
+    read -r response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+      echo -e "${YELLOW}更新 Homebrew...${NC}"
+      brew update
+      echo -e "${GREEN}Homebrew 更新完成${NC}"
+    else
+      echo -e "${GREEN}跳过 Homebrew 更新${NC}"
+    fi
   fi
 }
 
@@ -126,7 +138,12 @@ install_prerequisites() {
   
   # 安装基础工具
   echo -e "${YELLOW}安装基础工具...${NC}"
-  brew install git zsh curl fzf ripgrep fd
+  if brew install git zsh curl fzf ripgrep fd tmux; then
+    echo -e "${GREEN}基础工具安装完成${NC}"
+  else
+    echo -e "${RED}基础工具安装失败，请检查 Homebrew 状态${NC}"
+    return 1
+  fi
 
   # 安装 C 编译器 (Xcode Command Line Tools)
   if ! command -v clang >/dev/null 2>&1; then
@@ -143,7 +160,7 @@ install_prerequisites() {
   fi
 
   # 安装最新版 Neovim
-  local should_install_nvim=false
+  local install_neovim=false
   
   if ! command -v nvim >/dev/null 2>&1; then
     echo -e "${YELLOW}Neovim 未安装，正在下载最新版...${NC}"
@@ -212,8 +229,27 @@ install_fonts() {
   local font_dir="$HOME/Library/Fonts"
   mkdir -p "$font_dir"
   
+  # 获取最新版本的字体下载链接
+  echo -e "${YELLOW}正在获取最新版本的 Maple Mono NF CN 字体...${NC}"
   
-  local font_url="https://github.com/subframe7536/Maple-font/releases/download/v6.4/MapleMono-NF-CN.zip"
+  # 使用 GitHub API 获取最新版本
+  local latest_version=$(curl -s https://api.github.com/repos/subframe7536/Maple-font/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
+  
+  if [ -z "$latest_version" ]; then
+    echo -e "${RED}无法获取最新版本信息，使用默认版本 v6.4${NC}"
+    latest_version="v6.4"
+  else
+    echo -e "${GREEN}获取到最新版本: ${latest_version}${NC}"
+  fi
+  
+  # 检查网络连接
+  if ! curl -s --connect-timeout 5 https://github.com >/dev/null 2>&1; then
+    echo -e "${RED}网络连接失败，无法下载字体${NC}"
+    echo -e "${YELLOW}请检查网络连接后重试${NC}"
+    return 1
+  fi
+  
+  local font_url="https://github.com/subframe7536/Maple-font/releases/download/${latest_version}/MapleMono-NF-CN.zip"
   local temp_dir=$(mktemp -d)
   
   if curl -L "$font_url" -o "$temp_dir/MapleMono-NF-CN.zip"; then
@@ -295,8 +331,8 @@ install_zim() {
 # 可选安装 nvm
 install_nvm() {
   echo -e "\n${GREEN}=== 可选：安装 nvm (Node Version Manager) ===${NC}"
-  # 已安装则跳过
-  if command -v nvm >/dev/null 2>&1; then
+  # 已安装则跳过（nvm 是 shell 函数，需要检查不同方式）
+  if [ -d "$HOME/.nvm" ] || command -v nvm >/dev/null 2>&1; then
     echo -e "${YELLOW}检测到 nvm 已安装，跳过安装${NC}"
     return 0
   fi
@@ -306,8 +342,18 @@ install_nvm() {
   case "$yn" in
     [Yy]* )
       echo -e "${GREEN}开始安装 nvm...${NC}"
+      
+      # 获取最新版本的 nvm
+      local nvm_latest_version=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
+      if [ -z "$nvm_latest_version" ]; then
+        echo -e "${YELLOW}无法获取最新版本，使用默认版本 v0.40.3${NC}"
+        nvm_latest_version="v0.40.3"
+      else
+        echo -e "${GREEN}获取到最新版本: ${nvm_latest_version}${NC}"
+      fi
+      
       # shellcheck disable=SC2046
-      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+      curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${nvm_latest_version}/install.sh" | bash
       echo -e "${GREEN}nvm 安装完成，请重新加载终端或执行 'source ~/.nvm/nvm.sh'${NC}"
       ;;
     * )
@@ -347,6 +393,56 @@ install_tmux_plugins() {
   fi
 }
 
+# 验证安装结果
+verify_installation() {
+  echo -e "\n${GREEN}=== 验证安装结果 ===${NC}"
+  
+  local all_good=true
+  
+  # 检查关键工具
+  local tools=("nvim" "tmux" "zsh" "git" "fzf" "rg" "fd" "zoxide")
+  for tool in "${tools[@]}"; do
+    if command -v "$tool" >/dev/null 2>&1; then
+      echo -e "${GREEN}✓ $tool 已安装${NC}"
+    else
+      echo -e "${RED}✗ $tool 未找到${NC}"
+      all_good=false
+    fi
+  done
+  
+  # 检查符号链接
+  local symlinks=(
+    "$HOME/.zshrc:$HOME/dotfiles/shell/.zshrc"
+    "$HOME/.gitconfig:$HOME/dotfiles/git/.gitconfig"
+    "$HOME/.tmux.conf:$HOME/dotfiles/tmux/.tmux.conf"
+    "$HOME/.config/nvim:$HOME/dotfiles/nvim"
+  )
+  
+  for symlink_info in "${symlinks[@]}"; do
+    local target="${symlink_info%%:*}"
+    local source="${symlink_info##*:}"
+    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+      echo -e "${GREEN}✓ $target 符号链接正确${NC}"
+    else
+      echo -e "${RED}✗ $target 符号链接异常${NC}"
+      all_good=false
+    fi
+  done
+  
+  # 检查字体
+  if fc-list | grep -q "Maple Mono NF CN" 2>/dev/null; then
+    echo -e "${GREEN}✓ Maple Mono NF CN 字体已安装${NC}"
+  else
+    echo -e "${YELLOW}⚠ Maple Mono NF CN 字体可能未正确安装${NC}"
+  fi
+  
+  if [ "$all_good" = true ]; then
+    echo -e "\n${GREEN}🎉 所有关键组件安装验证通过！${NC}"
+  else
+    echo -e "\n${YELLOW}⚠️  部分组件可能存在问题，请检查上述输出${NC}"
+  fi
+}
+
 # 主安装流程
 main() {
   echo -e "\n${GREEN}=== 开始安装 MacOS dotfiles ===${NC}"
@@ -375,13 +471,15 @@ main() {
   # 创建符号链接
   create_symlink "$HOME/dotfiles/shell/.zshrc" "$HOME/.zshrc"
   create_symlink "$HOME/dotfiles/shell/.zimrc" "$HOME/.zimrc"
-  create_symlink "$HOME/dotfiles/git/.gitconfig" "$HOME/.gitconfig"
   create_symlink "$HOME/dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
   create_symlink "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
 
   # 安装/更新 LazyVim
   install_lazyvim
 
+  # 验证安装
+  verify_installation
+  
   echo -e "\n${GREEN}=== 安装完成 ===${NC}"
   echo -e "${YELLOW}请重新启动终端应用并设置字体为 'Maple Mono NF CN'${NC}"
 }

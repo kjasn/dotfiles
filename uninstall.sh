@@ -56,14 +56,6 @@ remove_symlinks() {
   fi
 }
 
-# 卸载 git-sync
-uninstall_git_sync() {
-  echo -e "\n${GREEN}=== 卸载 git-sync ===${NC}"
-  if [ -f /usr/local/bin/git-sync ]; then
-    echo -e "${YELLOW}删除 git-sync${NC}"
-    sudo rm -f /usr/local/bin/git-sync
-  fi
-}
 
 # 卸载字体
 uninstall_fonts() {
@@ -92,11 +84,11 @@ uninstall_fonts() {
 uninstall_homebrew_packages() {
   echo -e "\n${GREEN}=== 卸载 Homebrew 包（可选） ===${NC}"
   
-  read -r -p "是否卸载通过 Homebrew 安装的包 (zoxide, fzf, ripgrep, fd)? [y/N] " yn
+  read -r -p "是否卸载通过 Homebrew 安装的包 (tmux, zoxide, fzf, ripgrep, fd)? [y/N] " yn
   case "$yn" in
     [Yy]* )
       echo -e "${YELLOW}卸载 Homebrew 包...${NC}"
-      brew uninstall zoxide fzf ripgrep fd 2>/dev/null || true
+      brew uninstall tmux zoxide fzf ripgrep fd 2>/dev/null || true
       ;;
     * )
       echo -e "${YELLOW}跳过 Homebrew 包卸载${NC}"
@@ -134,9 +126,6 @@ main() {
   
   # 删除符号链接
   remove_symlinks
-  
-  # 卸载 git-sync
-  uninstall_git_sync
   
   # 卸载字体
   uninstall_fonts
