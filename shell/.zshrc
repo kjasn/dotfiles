@@ -1,6 +1,12 @@
 # 跳过系统级的 compinit，让 Zim 来处理补全初始化
 skip_global_compinit=1
 
+# PowerLevel10k 即时提示启用
+# 必须在 .zshrc 的最开始启用以获得最佳性能
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -184,3 +190,7 @@ export PATH=$PATH:$HOME/.go/bin
 
 # zoxide - smart cd command
 eval "$(zoxide init zsh)"
+
+# PowerLevel10k 配置文件
+# 运行 `p10k configure` 来生成配置文件
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

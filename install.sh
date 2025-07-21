@@ -482,6 +482,9 @@ main() {
   
   echo -e "\n${GREEN}=== 安装完成 ===${NC}"
   echo -e "${YELLOW}请重新启动终端应用并设置字体为 'Maple Mono NF CN'${NC}"
+  echo -e "\n${GREEN}=== PowerLevel10k 主题配置 ===${NC}"
+  echo -e "${YELLOW}首次打开终端时，PowerLevel10k 会自动运行配置向导${NC}"
+  echo -e "${YELLOW}如需重新配置，请运行: p10k configure${NC}"
 }
 
 # 执行主函数
