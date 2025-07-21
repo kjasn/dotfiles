@@ -26,8 +26,7 @@
 4. **Zim 框架**：自动写入 `/etc/shells` 并切换默认 Shell。
 5. **LazyVim**：`nvim --headless "+Lazy! sync"` 同步全部插件。
 6. **可选 nvm**：安装前询问是否需要 Node Version Manager。
-7. **可选 git-sync**：安装自定义的 git-sync 脚本到 `/usr/local/bin/git-sync`。
-8. **彩色输出 & 错误检测**：步骤清晰、出错即停 (`set -e`)。
+7. **彩色输出 & 错误检测**：步骤清晰、出错即停 (`set -e`)。
 
 ---
 
@@ -50,7 +49,6 @@ bash install.sh
 4. 创建所有符号链接；
 5. 安装 Zim & 切换默认 Shell；
 6. 同步 LazyVim 插件；
-7. 询问并按需安装 git-sync 工具。
 
 脚本具备**幂等性**，可在更新 dotfiles 后 **重复执行** 以刷新符号链接或升级依赖。
 
@@ -91,7 +89,7 @@ set -g prefix C-a
 ## TODO
 
 -   [ ] MacOS 分支完善
--   [ ] 字体与美化脚本
--   [ ] 自动安装 LSP / DAP / Mason Packages
+-   [x] 字体与美化脚本
+-   [x] 自动安装 LSP / DAP / Mason Packages
 
 ---
