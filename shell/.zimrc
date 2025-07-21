@@ -61,4 +61,4 @@ zmodule zsh-users/zsh-autosuggestions
 zmodule Aloxaf/fzf-tab
 
 # Theme
-zmodule bira
+zmodule romkatv/powerlevel10k --use degit
