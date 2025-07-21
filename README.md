@@ -1,8 +1,9 @@
 # MacOS Dotfiles
 
-> 一键安装 & 管理 MacOS 环境下的开发配置（Zsh / Neovim / Git / Tmux / Homebrew）
+> [!NOTE]
+> TODO
 >
-> 专为 Mac 用户优化，支持 Apple Silicon 和 Intel 芯片。
+> -   本文档绝大部分内容由 AI 生成，待重写。
 
 ---
 
@@ -20,16 +21,24 @@ git checkout refactor/mac-dotfiles
 bash install.sh
 ```
 
+**安装后设置**：
+
+1. 重新启动终端应用
+2. 设置终端字体为 'Maple Mono NF CN'
+3. PowerLevel10k 会自动运行配置向导，根据提示进行个性化设置
+4. 如需重新配置：`p10k configure`
+
 ---
 
 ## ✨ 功能特性
 
 ### 🛠️ 开发环境
 
--   **Neovim + LazyVim**: 现代化编辑器配置，支持 LSP、语法检查、格式化
--   **Zsh + Zim**: 快速、模块化的 Zsh 框架
--   **Tmux**: 终端复用器，支持会话管理
--   **Homebrew**: MacOS 包管理器
+-   **Neovim + LazyVim**
+-   **Zsh + Zim**: 替换掉了 `oh-my-zsh`
+-   **PowerLevel10k**: 不喜欢 zim 官方文档的主题，所以换成了 PowerLevel10k
+-   **Tmux**: 好用
+-   **Homebrew**: 必装
 
 ### 🎨 用户体验
 
@@ -43,7 +52,6 @@ bash install.sh
 -   **Git 配置**: 优化的 Git 别名和配置
 -   **Node.js**: 可选 nvm 安装
 -   **Go**: Go 语言环境配置
--   **Python**: Conda 环境支持
 
 ---
 
@@ -58,17 +66,13 @@ bash install.sh
 -   Maple Mono NF CN 字体
 -   Tmux 插件管理器 (TPM)
 
-### 可选安装
-
--   nvm (Node Version Manager)
-
 ### 实用脚本
 
 -   **git-sync.sh**: Git 上游同步脚本，用于同步 fork 仓库的上游更新
     -   使用方法: `./scripts/git-sync.sh [master|main]`
     -   如需全局使用，可复制到 `/usr/local/bin/` 目录
--   **upload-stage-server.sh**: 服务器文件上传脚本，使用固定 SSH 密钥快速上传文件
-    -   使用方法: `./scripts/upload-stage-server.sh <本地路径> <远程路径>`
+-   **upload-file-to-server.sh**: 服务器文件上传脚本，使用固定 SSH 密钥快速上传文件
+    -   使用方法: `./scripts/upload-file-to-server.sh <本地路径> <远程路径>`
     -   使用前需要配置脚本中的服务器信息和 SSH 密钥路径
 
 ---
@@ -218,6 +222,13 @@ upload-stage-server ./my_project /var/www/html/
 3. 确保 SSH 密钥有访问服务器的权限
 4. 脚本会自动检查远程文件是否存在，避免意外覆盖
 
+## PowerLevel10k 主题配置
+
+### 配置向导
+
+执行 `p10k configure` 进行配置，要修改配置就重新执行一次。
+配置文件位置：`~/.p10k.zsh`
+
 ---
 
 ## 🐛 故障排除
@@ -250,11 +261,3 @@ nvim --headless "+Lazy! sync" +qa
 ```
 
 ---
-
-## 📝 更新日志
-
--   **v1.0.0**: 初始 MacOS 版本
-    -   支持 Apple Silicon 和 Intel Mac
-    -   集成 Homebrew 包管理
-    -   添加 Maple Mono NF CN 字体
-    -   优化 Mac 用户快捷键
