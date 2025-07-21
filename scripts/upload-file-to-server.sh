@@ -2,9 +2,9 @@
 
 #================================================================
 #
-#          FILE: upload-remote-server
+#          FILE: upload-file-to-server
 #
-#         USAGE: upload-remote-server <local_source_path> <remote_destination_path>
+#         USAGE: upload-file-to-server <local_source_path> <remote_destination_path>
 #
 #   DESCRIPTION: 使用固定的 SSH 密钥，快速上传文件或目录到预设的服务器。
 #
