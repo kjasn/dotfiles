@@ -217,6 +217,19 @@ install_fonts() {
     return 0
   fi
 
+  # 交互确认是否安装字体
+  read -r -p "是否安装 Maple Mono NF CN 字体? [Y/n] " yn
+  case "$yn" in
+    [Nn]* )
+      echo -e "${YELLOW}已跳过字体安装${NC}"
+      echo -e "${YELLOW}如需手动安装，请访问: https://github.com/subframe7536/Maple-font/releases${NC}"
+      return 0
+      ;;
+    * )
+      echo -e "${GREEN}开始安装 Maple Mono NF CN 字体...${NC}"
+      ;;
+  esac
+
   # 检查是否安装了 fontconfig
   if ! command -v fc-list >/dev/null 2>&1; then
     echo -e "${YELLOW}安装 fontconfig 以支持字体管理...${NC}"
@@ -413,7 +426,7 @@ verify_installation() {
   # 检查符号链接
   local symlinks=(
     "$HOME/.zshrc:$HOME/dotfiles/shell/.zshrc"
-    "$HOME/.gitconfig:$HOME/dotfiles/git/.gitconfig"
+    "$HOME/.zimrc:$HOME/dotfiles/shell/.zimrc"
     "$HOME/.tmux.conf:$HOME/dotfiles/tmux/.tmux.conf"
     "$HOME/.config/nvim:$HOME/dotfiles/nvim"
   )
@@ -433,7 +446,8 @@ verify_installation() {
   if fc-list | grep -q "Maple Mono NF CN" 2>/dev/null; then
     echo -e "${GREEN}✓ Maple Mono NF CN 字体已安装${NC}"
   else
-    echo -e "${YELLOW}⚠ Maple Mono NF CN 字体可能未正确安装${NC}"
+    echo -e "${YELLOW}⚠ Maple Mono NF CN 字体未安装（用户选择跳过或安装失败）${NC}"
+    echo -e "${YELLOW}  如需安装，请访问: https://github.com/subframe7536/Maple-font/releases${NC}"
   fi
   
   if [ "$all_good" = true ]; then
@@ -459,7 +473,7 @@ main() {
   # 安装基础依赖
   install_prerequisites
 
-  # 安装字体
+  # 安装字体（可选）
   install_fonts
 
   # 安装 Zim
