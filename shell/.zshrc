@@ -143,6 +143,7 @@ alias rmnm="rm -rf node_modules"
 alias cls="clear"
 alias vim=nvim
 alias ez="exec zsh"
+alias lg="lazygit"
 
 # User configuration
 export EDITOR='nvim'
@@ -194,3 +195,5 @@ eval "$(zoxide init zsh)"
 # PowerLevel10k 配置文件
 # 运行 `p10k configure` 来生成配置文件
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export HOMEBREW_AUTO_UPDATE_SECS=5184000
+export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
