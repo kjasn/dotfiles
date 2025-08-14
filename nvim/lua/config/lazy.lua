@@ -20,6 +20,14 @@ require("lazy").setup({
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins" },
 		-- import/override with your plugins
 		{ import = "plugins" },
+		{
+			"lewis6991/gitsigns.nvim",
+			config = function()
+				require("gitsigns").setup({
+					current_line_blame = true, -- Enable inline Git blame
+				})
+			end,
+		},
 	},
 	extras = {
 		"lazyvim.plugins.extras.lang.go",
