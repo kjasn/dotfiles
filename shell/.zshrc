@@ -197,3 +197,8 @@ eval "$(zoxide init zsh)"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export HOMEBREW_AUTO_UPDATE_SECS=5184000
 export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
+
+# opencode
+export PATH=/Users/kjasn/.opencode/bin:$PATH
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
