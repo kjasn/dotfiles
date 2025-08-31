@@ -4,7 +4,6 @@
 local map = vim.keymap
 local opt = { noremap = true, silent = true }
 
-map.set("n", "<leader>e", ":lua MiniFiles.open()<cr>", opt)
 
 map.set({ "i" }, "kj", "<Esc>")
 
