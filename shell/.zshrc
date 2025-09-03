@@ -141,6 +141,8 @@ alias rmnm="rm -rf node_modules"
 alias cls="clear"
 alias vim=nvim
 alias ez="exec zsh"
+alias lg="lazygit"
+alias cc="claude"
 
 # User configuration
 export EDITOR='nvim'
