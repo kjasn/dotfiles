@@ -1,5 +1,5 @@
 return {
-	"echasnovski/mini.files",
+	"nvim-mini/mini.nvim",
 	version = "*",
 	lazy = true,
 	keys = {
