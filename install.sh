@@ -374,34 +374,67 @@ install_fnm() {
   fi
 }
 
-# 安装 Tmux 插件
-install_tmux_plugins() {
-  echo -e "\n${GREEN}=== 安装 Tmux 插件 (tpm) ===${NC}"
-
-  # 检查 tpm 是否已克隆
-  local tpm_path="$HOME/.tmux/plugins/tpm"
-  if [ ! -d "$tpm_path" ]; then
-    echo -e "${GREEN}正在克隆 Tmux Plugin Manager (tpm)...${NC}"
-    if ! git clone https://github.com/tmux-plugins/tpm "$tpm_path"; then
-      echo -e "${RED}tpm 克隆失败，请检查网络或 Git。${NC}"
-      return 1
-    fi
+# 安装 oh my tmux
+# 可选安装 oh my tmux
+install_oh_my_tmux() {
+  echo -e "\n${GREEN}=== 可选：安装 oh my tmux ===${NC}"
+  
+  # 检查是否已安装
+  if [ -d "$HOME/.local/share/tmux/oh-my-tmux" ]; then
+    echo -e "${YELLOW}检测到 oh my tmux 已安装${NC}"
+    read -r -p "是否更新 oh my tmux? [y/N] " yn
+    case "$yn" in
+      [Yy]* )
+        echo -e "${GREEN}正在更新 oh my tmux...${NC}"
+        ;;
+      * )
+        echo -e "${YELLOW}跳过 oh my tmux 更新${NC}"
+        return 0
+        ;;
+    esac
   else
-    echo -e "${YELLOW}检测到 tpm 已安装，跳过克隆。${NC}"
+    read -r -p "是否安装 oh my tmux? [y/N] " yn
+    case "$yn" in
+      [Yy]* )
+        echo -e "${GREEN}正在安装 oh my tmux...${NC}"
+        ;;
+      * )
+        echo -e "${YELLOW}已跳过 oh my tmux 安装${NC}"
+        return 0
+        ;;
+    esac
   fi
 
-  # 执行 tpm 的插件安装脚本
-  # 这会读取 ~/.tmux.conf 并安装其中列出的插件
-  local install_script="$tpm_path/bin/install_plugins"
-  if [ -f "$install_script" ]; then
-    echo -e "${GREEN}开始安装/更新 Tmux 插件...${NC}"
-    if "$install_script"; then
-      echo -e "${GREEN}Tmux 插件安装/更新完成。${NC}"
-    else
-      echo -e "${RED}Tmux 插件安装失败。${NC}"
-    fi
+  # 检查 tmux 是否正在运行
+  if pgrep -x tmux >/dev/null 2>&1; then
+    echo -e "${YELLOW}⚠️  检测到 tmux 正在运行${NC}"
+    echo -e "${YELLOW}为了正确安装/更新配置，需要先关闭所有 tmux 会话${NC}"
+    read -r -p "是否现在关闭所有 tmux 会话并继续? [y/N] " kill_yn
+    case "$kill_yn" in
+      [Yy]* )
+        echo -e "${YELLOW}正在关闭 tmux 服务器...${NC}"
+        tmux kill-server 2>/dev/null || pkill tmux 2>/dev/null
+        sleep 1
+        if pgrep -x tmux >/dev/null 2>&1; then
+          echo -e "${RED}无法关闭 tmux，请手动关闭后重试${NC}"
+          return 1
+        fi
+        echo -e "${GREEN}tmux 已关闭${NC}"
+        ;;
+      * )
+        echo -e "${YELLOW}已跳过 oh my tmux 安装（请先关闭 tmux）${NC}"
+        return 0
+        ;;
+    esac
+  fi
+
+  # 使用官方安装脚本
+  if curl -fsSL "https://github.com/gpakosz/.tmux/raw/refs/heads/master/install.sh#$(date +%s)" | bash; then
+    echo -e "${GREEN}oh my tmux 安装/更新完成${NC}"
+    echo -e "${YELLOW}提示：自定义配置将通过符号链接部署到 ~/.config/tmux/tmux.conf.local${NC}"
   else
-    echo -e "${RED}错误：找不到 tpm 的安装脚本。${NC}"
+    echo -e "${RED}oh my tmux 安装/更新失败${NC}"
+    return 1
   fi
 }
 
@@ -519,10 +552,13 @@ main() {
   # 安装 fnm（可选）
   install_fnm
 
+  # 安装 oh my tmux
+  install_oh_my_tmux
+
   # 创建符号链接
   create_symlink "$HOME/dotfiles/shell/.zshrc" "$HOME/.zshrc"
   create_symlink "$HOME/dotfiles/shell/.zimrc" "$HOME/.zimrc"
-  create_symlink "$HOME/dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
+  create_symlink "$HOME/dotfiles/tmux/.tmux.conf.local" "$HOME/.config/tmux/tmux.conf.local"
   create_symlink "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
 
   # 安装/更新 LazyVim

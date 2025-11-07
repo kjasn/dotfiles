@@ -1,0 +1,95 @@
+# ~/.tmux.conf.local
+# oh my tmux 用户自定义配置
+# 此文件会被 oh my tmux 的 ~/.tmux.conf 自动加载
+
+# ====================================
+# 自定义键位设置（保留原有配置）
+# ====================================
+
+# 修改 prefix 键为 C-q（默认是 C-a）
+unbind C-b
+unbind C-a
+set-option -g prefix C-q
+bind-key C-q send-prefix
+
+# 窗口分割键位（使用 | 和 -）
+unbind %
+bind | split-window -h -c "#{pane_current_path}"
+unbind '"'
+bind - split-window -v -c "#{pane_current_path}"
+
+# 重新加载配置（prefix + r）
+unbind r
+bind r source-file ~/.tmux.conf \; display "配置已重新加载!"
+
+# 调整窗格大小（prefix + h/j/k/l）
+bind -r j resize-pane -D 5
+bind -r k resize-pane -U 5
+bind -r l resize-pane -R 5
+bind -r h resize-pane -L 5
+bind -r m resize-pane -Z
+
+# 不使用 prefix 在窗格间切换（C-h/j/k/l）
+bind -n C-h select-pane -L
+bind -n C-j select-pane -D
+bind -n C-k select-pane -U
+bind -n C-l select-pane -R
+
+# ====================================
+# 通用设置
+# ====================================
+
+# 启用鼠标支持
+set -g mouse on
+
+# vi 模式
+set -g mode-keys vi
+set -sg escape-time 0
+
+# ====================================
+# 复制模式键位
+# ====================================
+
+bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key -T copy-mode-vi 'y' send -X copy-selection
+
+# 右键粘贴（如果使用 X11）
+bind-key -n MouseDown3Pane run "tmux set-buffer \"$(xclip -o -sel clip 2>/dev/null || pbpaste)\"; tmux paste-buffer"
+
+# ====================================
+# 窗口导航
+# ====================================
+
+# 在窗口间切换（prefix + n/p）
+bind n next-window
+bind p previous-window
+
+# ====================================
+# 插件配置（如需保留插件）
+# ====================================
+
+# 注意：oh my tmux 已经包含了很多功能，某些插件可能不再需要
+# 如果你想继续使用 tpm 和插件，取消下面的注释
+
+# set -g @plugin 'tmux-plugins/tpm'
+# set -g @plugin 'tmux-plugins/tmux-sensible'
+# set -g @plugin 'christoomey/vim-tmux-navigator'
+# set -g @plugin 'tmux-plugins/tmux-resurrect'
+# set -g @plugin 'tmux-plugins/tmux-continuum'
+# 
+# set -g @resurrect-capture-pane-contents 'on'
+# set -g @continuum-restore 'on'
+#
+# # 初始化 TPM (保持在配置文件最底部)
+# run '~/.tmux/plugins/tpm/tpm'
+
+# ====================================
+# oh my tmux 自定义外观（可选）
+# ====================================
+
+# 取消下面注释来自定义 oh my tmux 的配置
+# tmux_conf_theme_colour_1="#080808"    # 深灰色
+# tmux_conf_theme_colour_2="#303030"    # 灰色
+# tmux_conf_theme_colour_3="#8a8a8a"    # 浅灰色
+# tmux_conf_theme_colour_4="#00afff"    # 蓝色
+# tmux_conf_theme_colour_5="#ffff00"    # 黄色
