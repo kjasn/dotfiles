@@ -160,133 +160,83 @@ install_prerequisites() {
   fi
 
   # 安装最新版 Neovim
-  local install_neovim=false
-  
   if ! command -v nvim >/dev/null 2>&1; then
-    echo -e "${YELLOW}Neovim 未安装，正在下载最新版...${NC}"
-    install_neovim=true
+    echo -e "${YELLOW}Neovim 未安装，正在通过 Homebrew 安装...${NC}"
+    if brew install neovim; then
+      echo -e "${GREEN}Neovim 安装完成${NC}"
+    else
+      echo -e "${RED}Neovim 安装失败${NC}"
+      all_good=false
+    fi
   else
-    # 检查当前 Neovim 版本
-    current_version=$(nvim --version | head -n1 | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+')
-    echo -e "${BLUE}当前 Neovim 版本: ${current_version}${NC}"
-    echo -e "${YELLOW}是否要安装/升级到最新版本的 Neovim? (y/n)${NC}"
-    read -r response
-    if [[ "$response" =~ ^[Yy]$ ]]; then
-      install_neovim=true
-    else
-      install_neovim=false
-      echo -e "${GREEN}跳过 Neovim 安装${NC}"
-    fi
-  fi
-
-  if [ "$install_neovim" = true ]; then
-    echo -e "${YELLOW}正在下载最新版 Neovim...${NC}"
-    temp_dir=$(mktemp -d)
-    cd "$temp_dir"
-    
-    # 根据架构选择正确的版本
-    if [[ $(uname -m) == "arm64" ]]; then
-      # Apple Silicon Mac
-      curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-macos-arm64.tar.gz
-      sudo rm -rf /opt/nvim
-      sudo tar -C /opt -xzf nvim-macos-arm64.tar.gz
-      # 建立可执行链接，容错处理路径变动
-      sudo ln -sf /opt/nvim-macos-arm64/bin/nvim /usr/local/bin/nvim
-    else
-      # Intel Mac
-      curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-macos-x86_64.tar.gz
-      sudo rm -rf /opt/nvim
-      sudo tar -C /opt -xzf nvim-macos-x86_64.tar.gz
-      # 建立可执行链接，容错处理路径变动
-      sudo ln -sf /opt/nvim-macos-x86_64/bin/nvim /usr/local/bin/nvim
-    fi
-    
-    cd - >/dev/null 2>&1
-    rm -rf "$temp_dir"
-    echo -e "${GREEN}Neovim 安装完成${NC}"
+    echo -e "${BLUE}检测到 Neovim 已安装。${NC}"
+    read -r -p "是否通过 Homebrew 升级 Neovim? [y/N] " yn
+    case "$yn" in
+      [Yy]* )
+        echo -e "${YELLOW}正在升级 Neovim...${NC}"
+        if brew upgrade neovim; then
+          echo -e "${GREEN}Neovim 升级完成${NC}"
+        else
+          echo -e "${RED}Neovim 升级失败${NC}"
+        fi
+        ;;
+      * )
+        echo -e "${YELLOW}已跳过 Neovim 升级${NC}"
+        ;;
+    esac
   fi
 }
 
-# 安装字体
-install_fonts() {
-  echo -e "\n${GREEN}=== 安装字体 ===${NC}"
-  
-  # 检查是否已安装 Maple Mono NF CN 字体
-  if fc-list | grep -q "Maple Mono NF CN" 2>/dev/null; then
-    echo -e "${YELLOW}Maple Mono NF CN 字体已安装，跳过安装${NC}"
-    return 0
-  fi
-
-  # 交互确认是否安装字体
-  read -r -p "是否安装 Maple Mono NF CN 字体? [Y/n] " yn
+# 可选安装 lazygit
+install_lazygit() {
+  echo -e "\n${GREEN}=== 可选：安装 lazygit ===${NC}"
+  read -r -p "是否安装 lazygit? [y/N] " yn
   case "$yn" in
-    [Nn]* )
-      echo -e "${YELLOW}已跳过字体安装${NC}"
-      echo -e "${YELLOW}如需手动安装，请访问: https://github.com/subframe7536/Maple-font/releases${NC}"
-      return 0
+    [Yy]* )
+      echo -e "${YELLOW}通过 Homebrew 安装 lazygit...${NC}"
+      if brew install lazygit; then
+        echo -e "${GREEN}lazygit 安装完成${NC}"
+      else
+        echo -e "${RED}lazygit 安装失败${NC}"
+      fi
       ;;
     * )
-      echo -e "${GREEN}开始安装 Maple Mono NF CN 字体...${NC}"
+      echo -e "${YELLOW}已跳过 lazygit 安装${NC}"
       ;;
   esac
+}
 
-  # 检查是否安装了 fontconfig
-  if ! command -v fc-list >/dev/null 2>&1; then
-    echo -e "${YELLOW}安装 fontconfig 以支持字体管理...${NC}"
-    brew install fontconfig
-  fi
+# 安装字体（通过 Homebrew cask，可选）
+install_fonts() {
+  echo -e "\n${GREEN}=== 可选：安装 Maple Mono 字体 (Homebrew cask) ===${NC}"
 
-  echo -e "${YELLOW}正在安装 Maple Mono NF CN 字体...${NC}"
-  
-  # 创建字体目录
-  local font_dir="$HOME/Library/Fonts"
-  mkdir -p "$font_dir"
-  
-  # 获取最新版本的字体下载链接
-  echo -e "${YELLOW}正在获取最新版本的 Maple Mono NF CN 字体...${NC}"
-  
-  # 使用 GitHub API 获取最新版本
-  local latest_version=$(curl -s https://api.github.com/repos/subframe7536/Maple-font/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
-  
-  if [ -z "$latest_version" ]; then
-    echo -e "${RED}无法获取最新版本信息，使用默认版本 v6.4${NC}"
-    latest_version="v6.4"
-  else
-    echo -e "${GREEN}获取到最新版本: ${latest_version}${NC}"
-  fi
-  
-  # 检查网络连接
-  if ! curl -s --connect-timeout 5 https://github.com >/dev/null 2>&1; then
-    echo -e "${RED}网络连接失败，无法下载字体${NC}"
-    echo -e "${YELLOW}请检查网络连接后重试${NC}"
+  if ! command -v brew >/dev/null 2>&1; then
+    echo -e "${RED}错误：Homebrew 未安装，无法通过 cask 安装字体${NC}"
     return 1
   fi
-  
-  local font_url="https://github.com/subframe7536/Maple-font/releases/download/${latest_version}/MapleMono-NF-CN.zip"
-  local temp_dir=$(mktemp -d)
-  
-  if curl -L "$font_url" -o "$temp_dir/MapleMono-NF-CN.zip"; then
-    cd "$temp_dir"
-    if unzip -q MapleMono-NF-CN.zip; then
-      cp -f *.ttf "$font_dir/" 2>/dev/null || true
-      cd - >/dev/null 2>&1
-      rm -rf "$temp_dir"
-      
-      # 刷新字体缓存
-      fc-cache -fv >/dev/null 2>&1 || true
-      
-      echo -e "${GREEN}字体安装完成${NC}"
-      echo -e "${YELLOW}请在终端应用中设置字体为 'Maple Mono NF CN'${NC}"
-    else
-      echo -e "${RED}字体解压失败${NC}"
-      rm -rf "$temp_dir"
-    fi
-  else
-    echo -e "${RED}字体下载失败，请检查网络连接${NC}"
-    echo -e "${YELLOW}您可以手动下载字体: ${font_url}${NC}"
-    echo -e "${YELLOW}或访问字体项目页面: https://github.com/subframe7536/Maple-font/releases${NC}"
-    rm -rf "$temp_dir"
-  fi
+
+  read -r -p "是否通过 Homebrew 安装 Maple Mono 系列字体（Maple Mono / Maple Mono NF / Maple Mono NF CN）? [y/N] " yn
+  case "$yn" in
+    [Yy]* )
+      local casks=("font-maple-mono" "font-maple-mono-nf" "font-maple-mono-nf-cn")
+      for c in "${casks[@]}"; do
+        echo -e "${YELLOW}检查并安装 ${c} ...${NC}"
+        if brew list --cask "$c" >/dev/null 2>&1; then
+          echo -e "${GREEN}${c} 已安装，跳过${NC}"
+        else
+          if brew install --cask "$c"; then
+            echo -e "${GREEN}${c} 安装完成${NC}"
+          else
+            echo -e "${RED}${c} 安装失败，请手动重试${NC}"
+          fi
+        fi
+      done
+      echo -e "${YELLOW}安装完成后，请在终端应用中选择字体 'Maple Mono NF CN'（如需）${NC}"
+      ;;
+    * )
+      echo -e "${YELLOW}已跳过字体安装${NC}"
+      ;;
+  esac
 }
 
 # 安装（或更新）LazyVim 插件集
@@ -341,38 +291,19 @@ install_zim() {
   fi
 }
 
-# 可选安装 nvm
-install_nvm() {
-  echo -e "\n${GREEN}=== 可选：安装 nvm (Node Version Manager) ===${NC}"
-  # 已安装则跳过（nvm 是 shell 函数，需要检查不同方式）
-  if [ -d "$HOME/.nvm" ] || command -v nvm >/dev/null 2>&1; then
-    echo -e "${YELLOW}检测到 nvm 已安装，跳过安装${NC}"
-    return 0
+# 可选安装 fnm
+install_fnm() {
+  echo -e "\n${GREEN}=== 可选：安装 fnm (Fast Node Manager) ===${NC}"
+  if ! command -v fnm >/dev/null 2>&1; then
+    echo -e "${YELLOW}fnm 未安装，正在通过 Homebrew 安装...${NC}"
+    if brew install fnm; then
+      echo -e "${GREEN}fnm 安装完成${NC}"
+    else
+      echo -e "${RED}fnm 安装失败${NC}"
+    fi
+  else
+    echo -e "${GREEN}fnm 已安装${NC}"
   fi
-
-  # 交互确认
-  read -r -p "是否安装 nvm? [y/N] " yn
-  case "$yn" in
-    [Yy]* )
-      echo -e "${GREEN}开始安装 nvm...${NC}"
-      
-      # 获取最新版本的 nvm
-      local nvm_latest_version=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
-      if [ -z "$nvm_latest_version" ]; then
-        echo -e "${YELLOW}无法获取最新版本，使用默认版本 v0.40.3${NC}"
-        nvm_latest_version="v0.40.3"
-      else
-        echo -e "${GREEN}获取到最新版本: ${nvm_latest_version}${NC}"
-      fi
-      
-      # shellcheck disable=SC2046
-      curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${nvm_latest_version}/install.sh" | bash
-      echo -e "${GREEN}nvm 安装完成，请重新加载终端或执行 'source ~/.nvm/nvm.sh'${NC}"
-      ;;
-    * )
-      echo -e "${YELLOW}已跳过 nvm 安装${NC}"
-      ;;
-  esac
 }
 
 # 安装 Tmux 插件
@@ -404,6 +335,38 @@ install_tmux_plugins() {
   else
     echo -e "${RED}错误：找不到 tpm 的安装脚本。${NC}"
   fi
+}
+
+# 可选：部署 Ghostty 配置
+install_ghostty_config() {
+  echo -e "\n${GREEN}=== 可选：部署 Ghostty 配置 ===${NC}"
+  local repo_conf="$HOME/dotfiles/shell/ghostty_config"
+  if [ ! -f "$repo_conf" ]; then
+    echo -e "${YELLOW}警告：仓库中未找到 $repo_conf，跳过 Ghostty 配置部署${NC}"
+    return 0
+  fi
+
+  read -r -p "是否将仓库的 Ghostty 配置部署到用户配置 (~/.config/ghostty/config)？ [y/N] " yn
+  case "$yn" in
+    [Yy]* )
+      local target_dir="$HOME/.config/ghostty"
+      local target_file="$target_dir/config"
+      mkdir -p "$target_dir"
+      if [ -e "$target_file" ]; then
+        local backup="$target_file.bak.$(date +%Y%m%d%H%M%S)"
+        echo -e "${YELLOW}检测到已有 Ghostty 配置，备份为: $backup${NC}"
+        mv "$target_file" "$backup"
+      fi
+      if cp -f "$repo_conf" "$target_file"; then
+        echo -e "${GREEN}已将仓库的 Ghostty 配置部署到 $target_file${NC}"
+      else
+        echo -e "${RED}部署 Ghostty 配置失败，请检查权限${NC}"
+      fi
+      ;;
+    * )
+      echo -e "${YELLOW}已跳过 Ghostty 配置部署${NC}"
+      ;;
+  esac
 }
 
 # 验证安装结果
@@ -473,14 +436,20 @@ main() {
   # 安装基础依赖
   install_prerequisites
 
+  # 安装 lazygit （可选）
+  install_lazygit
+
   # 安装字体（可选）
   install_fonts
+
+  # 可选：部署 Ghostty 配置
+  install_ghostty_config
 
   # 安装 Zim
   install_zim
 
-  # 安装 nvm（可选）
-  install_nvm
+  # 安装 fnm（可选）
+  install_fnm
 
   # 创建符号链接
   create_symlink "$HOME/dotfiles/shell/.zshrc" "$HOME/.zshrc"
