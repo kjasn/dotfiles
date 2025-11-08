@@ -144,6 +144,7 @@ alias cls="clear"
 alias vim=nvim
 alias ez="exec zsh"
 alias lg="lazygit"
+alias tma="tmux attach"
 
 # User configuration
 export EDITOR='nvim'
