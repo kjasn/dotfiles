@@ -1,14 +1,17 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
+	build = ":TSUpdate",
+	event = { "BufReadPost", "BufNewFile" },
 	opts = {
 		ensure_installed = {
-			"go",
-			"vue",
 			"bash",
+			"c",
+			"go",
 			"html",
 			"javascript",
 			"json",
 			"lua",
+			"luadoc",
 			"markdown",
 			"markdown_inline",
 			"python",
@@ -17,6 +20,8 @@ return {
 			"tsx",
 			"typescript",
 			"vim",
+			"vimdoc",
+			"vue",
 			"yaml",
 		},
 	},

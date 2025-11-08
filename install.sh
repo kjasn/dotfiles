@@ -249,6 +249,74 @@ install_lazyvim() {
     echo -e "${RED}LazyVim 插件安装失败${NC}"
     echo -e "${YELLOW}如需查看详细错误信息，请手动运行: nvim --headless \"+Lazy! sync\" +qa${NC}"
   fi
+  
+  # 额外确保 treesitter 正确安装
+  echo -e "${YELLOW}正在确保 nvim-treesitter 正确安装...${NC}"
+  if nvim --headless "+TSUpdate" +qa >/dev/null 2>&1; then
+    echo -e "${GREEN}nvim-treesitter 更新完成${NC}"
+  else
+    echo -e "${YELLOW}nvim-treesitter 更新可能失败，建议手动运行: :TSUpdate${NC}"
+  fi
+}
+
+# 检查并提示 tree-sitter CLI
+check_treesitter_cli() {
+  echo -e "\n${BLUE}=== Tree-sitter CLI 检查 ===${NC}"
+  
+  if command -v tree-sitter >/dev/null 2>&1; then
+    local ts_version=$(tree-sitter --version 2>/dev/null | head -n1)
+    echo -e "${GREEN}✓ tree-sitter CLI 已安装: ${ts_version}${NC}"
+  else
+    echo -e "${YELLOW}⚠️  tree-sitter CLI 未安装${NC}"
+    echo -e "${YELLOW}nvim-treesitter 插件需要 tree-sitter CLI 来编译语法解析器${NC}"
+    echo -e ""
+    echo -e "${BLUE}推荐安装方法（使用 npm）：${NC}"
+    echo -e "  ${GREEN}npm install -g tree-sitter-cli${NC}"
+    echo -e ""
+    echo -e "${BLUE}或使用 Cargo（Rust）：${NC}"
+    echo -e "  ${GREEN}cargo install tree-sitter-cli${NC}"
+    echo -e ""
+    echo -e "${YELLOW}注意：'brew install tree-sitter' 只安装库，不包含 CLI 工具${NC}"
+    echo -e "${YELLOW}      如需使用 Homebrew，请确保安装的是 tree-sitter-cli${NC}"
+  fi
+}
+
+# 修复 nvim-treesitter 问题
+fix_treesitter() {
+  echo -e "\n${YELLOW}=== 修复 nvim-treesitter ===${NC}"
+  echo -e "${YELLOW}此函数将清理并重新安装 nvim-treesitter${NC}"
+  
+  read -r -p "是否继续修复? [y/N] " yn
+  case "$yn" in
+    [Yy]* )
+      echo -e "${YELLOW}1. 清理 Lazy 缓存...${NC}"
+      rm -rf "$HOME/.local/share/nvim/lazy/nvim-treesitter"
+      rm -rf "$HOME/.local/state/nvim/lazy/cache"
+      
+      echo -e "${YELLOW}2. 重新安装插件...${NC}"
+      if nvim --headless "+Lazy! sync" +qa 2>&1 | grep -q "Error\|error"; then
+        echo -e "${RED}插件同步可能遇到问题${NC}"
+      else
+        echo -e "${GREEN}插件同步完成${NC}"
+      fi
+      
+      echo -e "${YELLOW}3. 更新 Treesitter 解析器...${NC}"
+      if nvim --headless "+TSUpdateSync" +qa >/dev/null 2>&1; then
+        echo -e "${GREEN}Treesitter 解析器更新完成${NC}"
+      else
+        echo -e "${YELLOW}部分解析器可能更新失败${NC}"
+      fi
+      
+      echo -e "${GREEN}修复完成！${NC}"
+      echo -e "${YELLOW}建议：${NC}"
+      echo -e "  1. 重新打开 nvim"
+      echo -e "  2. 运行 :checkhealth nvim-treesitter"
+      echo -e "  3. 如仍有问题，运行 :TSInstall all"
+      ;;
+    * )
+      echo -e "${YELLOW}已取消修复${NC}"
+      ;;
+  esac
 }
 
 # 安装 Zim zsh 框架
@@ -459,6 +527,9 @@ main() {
 
   # 安装/更新 LazyVim
   install_lazyvim
+
+  # 检查 tree-sitter CLI
+  check_treesitter_cli
 
   # 验证安装
   verify_installation
