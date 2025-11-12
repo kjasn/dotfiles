@@ -145,6 +145,7 @@ alias vim=nvim
 alias ez="exec zsh"
 alias lg="lazygit"
 alias tma="tmux attach"
+alias bs="brew services"
 
 # User configuration
 export EDITOR='nvim'
@@ -163,8 +164,9 @@ else
 fi
 
 # go
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$HOME/.go
+export PATH="$(go env GOPATH)/bin:${PATH}"
+# export PATH=$PATH:/usr/local/go/bin
+# export GOPATH=$HOME/.go
 
 # fnm
 eval "$(fnm env --use-on-cd)"
