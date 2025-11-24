@@ -8,9 +8,10 @@ local augroup = vim.api.nvim_create_augroup("UserAutoCmds", { clear = true })
 vim.api.nvim_create_autocmd("FocusLost", {
 	group = augroup,
 	pattern = "*",
+	nested = true, -- Allow nested autocmds to run
 	callback = function()
 		if vim.bo.modified and vim.fn.filereadable(vim.fn.expand("%")) then
-			vim.cmd.wall()
+			vim.cmd("silent! wall")
 		end
 	end,
 	desc = "Auto save all modified buffers on focus lost",
