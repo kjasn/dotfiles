@@ -20,56 +20,23 @@ create_symlink() {
     echo -e "${RED}错误：源文件 '$source_file' 不存在${NC}"
     return 1
   fi
-  local source_file="$1"
-  local target_file="$2"
-
-  # 检查源文件是否存在
-  if [ ! -e "$source_file" ]; then
-    echo -e "${RED}错误：源文件 '$source_file' 不存在${NC}"
-    return 1
-  fi
 
   # 如果目标已存在
-  if [ -e "$target_file" ]; then
+  if [ -e "$target_file" ] || [ -L "$target_file" ]; then
     # 如果是符号链接且已经指向正确位置
     if [ -L "$target_file" ] && [ "$(readlink "$target_file")" = "$source_file" ]; then
       echo -e "${YELLOW}跳过：$target_file 已经正确链接到 $source_file${NC}"
       return 0
     fi
 
-    # 备份原有文件
-    local backup_file="${target_file}.bak.$(date +%Y%m%d%H%M%S)"
-    echo -e "${YELLOW}备份原有文件：$target_file -> $backup_file${NC}"
-    mv "$target_file" "$backup_file"
-  fi
-  # 如果目标已存在
-  if [ -e "$target_file" ]; then
-    # 如果是符号链接且已经指向正确位置
-    if [ -L "$target_file" ] && [ "$(readlink "$target_file")" = "$source_file" ]; then
-      echo -e "${YELLOW}跳过：$target_file 已经正确链接到 $source_file${NC}"
-      return 0
-    fi
-
-    # 备份原有文件
+    # 备份原有文件/链接
     local backup_file="${target_file}.bak.$(date +%Y%m%d%H%M%S)"
     echo -e "${YELLOW}备份原有文件：$target_file -> $backup_file${NC}"
     mv "$target_file" "$backup_file"
   fi
 
-  # 确保目标目录存在
+  # 确保目标目录存在并创建符号链接
   mkdir -p "$(dirname "$target_file")"
-
-  # 创建链接
-  if ln -s "$source_file" "$target_file"; then
-    echo -e "${GREEN}创建链接：$target_file -> $source_file${NC}"
-  else
-    echo -e "${RED}错误：无法创建链接 $target_file${NC}"
-    return 1
-  fi
-  # 确保目标目录存在
-  mkdir -p "$(dirname "$target_file")"
-
-  # 创建链接
   if ln -s "$source_file" "$target_file"; then
     echo -e "${GREEN}创建链接：$target_file -> $source_file${NC}"
   else
@@ -206,38 +173,6 @@ install_lazygit() {
   esac
 }
 
-# 安装字体（通过 Homebrew cask，可选）
-install_fonts() {
-  echo -e "\n${GREEN}=== 可选：安装 Maple Mono 字体 (Homebrew cask) ===${NC}"
-
-  if ! command -v brew >/dev/null 2>&1; then
-    echo -e "${RED}错误：Homebrew 未安装，无法通过 cask 安装字体${NC}"
-    return 1
-  fi
-
-  read -r -p "是否通过 Homebrew 安装 Maple Mono 系列字体（Maple Mono / Maple Mono NF / Maple Mono NF CN）? [y/N] " yn
-  case "$yn" in
-    [Yy]* )
-      local casks=("font-maple-mono" "font-maple-mono-nf" "font-maple-mono-nf-cn")
-      for c in "${casks[@]}"; do
-        echo -e "${YELLOW}检查并安装 ${c} ...${NC}"
-        if brew list --cask "$c" >/dev/null 2>&1; then
-          echo -e "${GREEN}${c} 已安装，跳过${NC}"
-        else
-          if brew install --cask "$c"; then
-            echo -e "${GREEN}${c} 安装完成${NC}"
-          else
-            echo -e "${RED}${c} 安装失败，请手动重试${NC}"
-          fi
-        fi
-      done
-      echo -e "${YELLOW}安装完成后，请在终端应用中选择字体 'Maple Mono NF CN'（如需）${NC}"
-      ;;
-    * )
-      echo -e "${YELLOW}已跳过字体安装${NC}"
-      ;;
-  esac
-}
 
 # 安装（或更新）LazyVim 插件集
 install_lazyvim() {
@@ -488,31 +423,38 @@ verify_installation() {
   done
   
   # 检查符号链接
+  # 注意：安装流程会把 tmux 的本地配置部署为 ~/.config/tmux/tmux.conf.local
   local symlinks=(
     "$HOME/.zshrc:$HOME/dotfiles/shell/.zshrc"
     "$HOME/.zimrc:$HOME/dotfiles/shell/.zimrc"
-    "$HOME/.tmux.conf:$HOME/dotfiles/tmux/.tmux.conf"
+    "$HOME/.config/tmux/tmux.conf.local:$HOME/dotfiles/tmux/.tmux.conf.local"
     "$HOME/.config/nvim:$HOME/dotfiles/nvim"
   )
-  
+
   for symlink_info in "${symlinks[@]}"; do
     local target="${symlink_info%%:*}"
     local source="${symlink_info##*:}"
-    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
-      echo -e "${GREEN}✓ $target 符号链接正确${NC}"
+    if [ -L "$target" ]; then
+      # readlink returns the symlink target (may be relative)
+      local dest
+      dest=$(readlink "$target" 2>/dev/null || true)
+
+      # If dest is a relative path, make it absolute relative to the symlink directory
+      if [ -n "$dest" ] && [ "${dest#/}" = "$dest" ]; then
+        dest="$(cd "$(dirname "$target")" && printf "%s/%s" "$PWD" "$dest")"
+      fi
+
+      if [ "$dest" = "$source" ]; then
+        echo -e "${GREEN}✓ $target 符号链接正确${NC}"
+      else
+        echo -e "${RED}✗ $target 符号链接异常（期望: $source, 实际: $dest）${NC}"
+        all_good=false
+      fi
     else
-      echo -e "${RED}✗ $target 符号链接异常${NC}"
+      echo -e "${RED}✗ $target 未创建为符号链接${NC}"
       all_good=false
     fi
   done
-  
-  # 检查字体
-  if fc-list | grep -q "Maple Mono NF CN" 2>/dev/null; then
-    echo -e "${GREEN}✓ Maple Mono NF CN 字体已安装${NC}"
-  else
-    echo -e "${YELLOW}⚠ Maple Mono NF CN 字体未安装（用户选择跳过或安装失败）${NC}"
-    echo -e "${YELLOW}  如需安装，请访问: https://github.com/subframe7536/Maple-font/releases${NC}"
-  fi
   
   if [ "$all_good" = true ]; then
     echo -e "\n${GREEN}🎉 所有关键组件安装验证通过！${NC}"
@@ -539,9 +481,6 @@ main() {
 
   # 安装 lazygit （可选）
   install_lazygit
-
-  # 安装字体（可选）
-  install_fonts
 
   # 可选：部署 Ghostty 配置
   install_ghostty_config
@@ -571,7 +510,6 @@ main() {
   verify_installation
   
   echo -e "\n${GREEN}=== 安装完成 ===${NC}"
-  echo -e "${YELLOW}请重新启动终端应用并设置字体为 'Maple Mono NF CN'${NC}"
   echo -e "\n${GREEN}=== PowerLevel10k 主题配置 ===${NC}"
   echo -e "${YELLOW}首次打开终端时，PowerLevel10k 会自动运行配置向导${NC}"
   echo -e "${YELLOW}如需重新配置，请运行: p10k configure${NC}"

@@ -4,7 +4,6 @@
 local map = vim.keymap
 local opt = { noremap = true, silent = true }
 
-
 map.set({ "i" }, "kj", "<Esc>")
 
 -- Alt + ` open terminal at buttom
@@ -21,14 +20,11 @@ map.set(
 	{ desc = "Live Grep With Args" }
 )
 
-map.set({ "n", "i", "v" }, "<C-a>", "ggyG", opt)
 
-map.set({ "n" }, "sv", ":vsp<CR>", opt)
-map.set({ "n" }, "sh", ":sp<CR>", opt)
 
 map.set({ "n", "i", "v" }, "<C-w>", ":bd<CR>", opt)
 
-map.set("n", "<C-h>", ":TmuxNavigateLeft<CR>", opt)
-map.set("n", "<C-j>", ":TmuxNavigateDown<CR>", opt)
-map.set("n", "<C-k>", ":TmuxNavigateUp<CR>", opt)
-map.set("n", "<C-l>", ":TmuxNavigateRight<CR>", opt)
+-- map.set("n", "<C-h>", ":TmuxNavigateLeft<CR>", opt)
+-- map.set("n", "<C-j>", ":TmuxNavigateDown<CR>", opt)
+-- map.set("n", "<C-k>", ":TmuxNavigateUp<CR>", opt)
+-- map.set("n", "<C-l>", ":TmuxNavigateRight<CR>", opt)
