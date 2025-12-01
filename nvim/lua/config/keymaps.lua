@@ -20,8 +20,6 @@ map.set(
 	{ desc = "Live Grep With Args" }
 )
 
-
-
 map.set({ "n", "i", "v" }, "<C-w>", ":bd<CR>", opt)
 
 -- map.set("n", "<C-h>", ":TmuxNavigateLeft<CR>", opt)
