@@ -146,6 +146,8 @@ alias ez="exec zsh"
 alias lg="lazygit"
 alias tma="tmux attach"
 alias bs="brew services"
+alias cc="claude" # claude code
+alias ct="cloudflared tunnel"
 
 # User configuration
 export EDITOR='nvim'
