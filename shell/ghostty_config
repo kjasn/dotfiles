@@ -4,10 +4,9 @@ window-save-state = always
 clipboard-read = allow
 clipboard-write = allow
 copy-on-select = true
-font-size = 18
+font-size = 17
+font-family = "Monaco"
 font-family = "Maple Mono NF CN"
-# font-family = "PingFang SC"
-# custom-shader = shaders/glow.glsl
 cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor
@@ -72,7 +71,7 @@ window-padding-x = 15
 window-padding-y = 15
 window-save-state = "always"
 
-background-opacity = 0.8
+background-opacity = 0.9
 # 背景不透明度
 background-blur-radius = 25
 # 背景模糊半径
