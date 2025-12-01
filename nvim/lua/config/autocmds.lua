@@ -16,3 +16,16 @@ vim.api.nvim_create_autocmd("FocusLost", {
 	end,
 	desc = "Auto save all modified buffers on focus lost",
 })
+
+-- Auto organize imports on save for various file types
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = augroup,
+	pattern = { "*.go", "*.py", "*.ts", "*.tsx", "*.js", "*.jsx" },
+	callback = function()
+		pcall(function()
+			local lsp_utils = require("utils.lsp")
+			lsp_utils.organize_imports(1000)
+		end)
+	end,
+	desc = "Organize imports on save",
+})
