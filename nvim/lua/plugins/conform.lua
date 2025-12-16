@@ -18,11 +18,6 @@ return {
 			yaml = { "prettier" },
 			markdown = { "prettier" },
 		},
-		-- Enable formatting on save
-		format_on_save = {
-			timeout_ms = 500,
-			lsp_fallback = true,
-		},
+
 	},
 }
-
