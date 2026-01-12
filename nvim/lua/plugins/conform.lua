@@ -6,7 +6,7 @@ return {
 		-- Set up formatters
 		formatters_by_ft = {
 			lua = { "stylua" },
-			go = { "gofmt", "gofumpt", "goimports" },
+			-- Go: Let gopls handle everything (format + organize imports)
 			python = { "isort", "black" },
 			javascript = { "prettier" },
 			typescript = { "prettier" },
@@ -18,6 +18,5 @@ return {
 			yaml = { "prettier" },
 			markdown = { "prettier" },
 		},
-
 	},
 }
