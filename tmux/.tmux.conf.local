@@ -507,6 +507,11 @@ set -g mouse on
 set -g mode-keys vi
 set -sg escape-time 0
 
+# Fix: prevent stray ':' from triggering tmux command-prompt
+# (rare terminals may inject the prefix key accidentally)
+unbind -T prefix :
+bind -T prefix : command-prompt
+
 # ====================================
 # 复制模式键位
 # ====================================
