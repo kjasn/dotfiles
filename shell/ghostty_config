@@ -78,3 +78,6 @@ background-blur-radius = 25
 
 # 更安全的快捷键，避免冲突
 keybind = global:alt+grave_accent=toggle_quick_terminal
+
+# 在 tmux 中允许 Cmd+Click 打开链接
+mouse-shift-capture = false
