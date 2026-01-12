@@ -454,10 +454,6 @@ tmux_conf_uninstall_plugins_on_reload=true
 #   curl -s "$url" | perl -MJSON::PP=decode_json -CO -0777 -E '$response = decode_json(readline *STDIN); say ($response->{stargazers_count})'
 #   sleep 300                                         # sleep for 5 minutes, throttle network requests whatever the value of status-interval
 # }
-#
-# "$@"
-# # /!\ do not remove the previous line
-# #     do not write below this line
 
 # ~/.tmux.conf.local
 # oh my tmux 用户自定义配置
@@ -478,6 +474,10 @@ unbind %
 bind | split-window -h -c "#{pane_current_path}"
 unbind '"'
 bind - split-window -v -c "#{pane_current_path}"
+
+# 取消 oh my tmux 默认 <prefix> C-h/l 切换窗口
+unbind -T prefix C-h
+unbind -T prefix C-l
 
 # 重新加载配置（prefix + r）
 unbind r
@@ -509,8 +509,8 @@ set -sg escape-time 0
 
 # Fix: prevent stray ':' from triggering tmux command-prompt
 # (rare terminals may inject the prefix key accidentally)
-unbind -T prefix :
-bind -T prefix : command-prompt
+# unbind -T prefix :
+# bind -T prefix : command-prompt
 
 # ====================================
 # 复制模式键位
@@ -541,3 +541,9 @@ set -g @plugin 'christoomey/vim-tmux-navigator'
 
 set -g @resurrect-capture-pane-contents 'on'
 set -g @continuum-restore 'on'
+
+#
+# "$@"
+# # /!\ do not remove the previous line
+# #     do not write below this line
+
