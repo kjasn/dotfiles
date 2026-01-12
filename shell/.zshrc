@@ -1,8 +1,30 @@
 # 跳过系统级的 compinit，让 Zim 来处理补全初始化
 skip_global_compinit=1
 
+# MacOS 环境变量配置
+export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+
+# Homebrew 环境变量
+if [[ $(uname -m) == "arm64" ]]; then
+    # Apple Silicon Mac
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    # Intel Mac
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# go
+export PATH="$(go env GOPATH)/bin:${PATH}"
+# export PATH=$PATH:/usr/local/go/bin
+# export GOPATH=$HOME/.go
+
+# fnm
+eval "$(fnm env --use-on-cd)"
+
+# zoxide - smart cd command
+eval "$(zoxide init zsh)"
+
 # PowerLevel10k 即时提示启用
-# 必须在 .zshrc 的最开始启用以获得最佳性能
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -147,61 +169,27 @@ alias lg="lazygit"
 alias tma="tmux attach"
 alias bs="brew services"
 alias cc="claude" # claude code
+alias oc="opencode"
 alias ct="cloudflared tunnel"
 
 # User configuration
 export EDITOR='nvim'
 # export VISUAL='nvim'
 
-# MacOS 环境变量配置
-export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
-
-# Homebrew 环境变量
-if [[ $(uname -m) == "arm64" ]]; then
-    # Apple Silicon Mac
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-else
-    # Intel Mac
-    eval "$(/usr/local/bin/brew shellenv)"
-fi
-
-# go
-export PATH="$(go env GOPATH)/bin:${PATH}"
-# export PATH=$PATH:/usr/local/go/bin
-# export GOPATH=$HOME/.go
-
-# fnm
-eval "$(fnm env --use-on-cd)"
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="$HOME/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
 # Protoc
 export PATH="$PATH:$HOME/.local/bin"
 export PATH=$PATH:$HOME/.go/bin
-
-# zoxide - smart cd command
-eval "$(zoxide init zsh)"
 
 # PowerLevel10k 配置文件
 # 运行 `p10k configure` 来生成配置文件
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export HOMEBREW_AUTO_UPDATE_SECS=5184000
-export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
 
 # opencode
 export PATH=/Users/kjasn/.opencode/bin:$PATH
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+# Added by Antigravity
+export PATH="/Users/cltx/.antigravity/antigravity/bin:$PATH"
+alias lzd='lazydocker'
