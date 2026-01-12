@@ -4,17 +4,30 @@
 
 local augroup = vim.api.nvim_create_augroup("UserAutoCmds", { clear = true })
 
--- Auto save all modified buffers on focus lost
+-- Auto save when buffer is hidden (like VSCode onFocusChange)
+vim.api.nvim_create_autocmd("BufLeave", {
+	group = augroup,
+	pattern = "*",
+	nested = true,
+	callback = function()
+		if vim.bo.modified then
+			vim.cmd("silent! update")
+		end
+	end,
+	desc = "Auto save on buffer leave",
+})
+
+-- Fallback: auto save on focus lost
 vim.api.nvim_create_autocmd("FocusLost", {
 	group = augroup,
 	pattern = "*",
-	nested = true, -- Allow nested autocmds to run
+	nested = true,
 	callback = function()
-		if vim.bo.modified and vim.fn.filereadable(vim.fn.expand("%")) then
-			vim.cmd("silent! wall")
+		if vim.bo.modified then
+			vim.cmd("silent! update")
 		end
 	end,
-	desc = "Auto save all modified buffers on focus lost",
+	desc = "Auto save on focus lost",
 })
 
 -- Auto organize imports on save for various file types (excluding Go, handled by gopls)
