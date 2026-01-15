@@ -3,52 +3,22 @@
 -- Add any additional options here
 
 local opt = vim.opt
-opt.tabstop = 4 --  set tab as 4 spaces
-opt.shiftwidth = 4 -- 4 spaces indent
-opt.softtabstop = 4 -- delete 4 spaces each backspace
-opt.expandtab = true -- tab show as spaces
-opt.wrap = true
-opt.linebreak = true
 
--- set clipboard system clipboard
-vim.opt.clipboard = "unnamedplus"
+-- 缩进配置 (LazyVim 默认是 2)
+opt.tabstop = 4 -- Tab 占 4 个空格
+opt.shiftwidth = 4 -- 缩进使用 4 个空格
+opt.softtabstop = 4 -- 退格键删除 4 个空格
+opt.expandtab = true -- 将 Tab 转换为垂直空格
 
--- MacOS 特定配置
--- 启用鼠标支持
-opt.mouse = "a"
+-- 文本显示
+opt.wrap = true -- 启用自动换行
+opt.linebreak = true -- 不在单词中间断行
 
--- 启用系统剪贴板
-opt.clipboard:append("unnamedplus")
-
--- 启用光标行高亮
-opt.cursorline = true
-
--- 启用光标列高亮
-opt.cursorcolumn = false
-
--- 启用行号
-opt.number = true
-
--- 启用相对行号
-opt.relativenumber = true
-
--- 启用符号列
-opt.signcolumn = "yes"
-
--- 启用搜索高亮
-opt.hlsearch = true
-
--- 启用增量搜索
-opt.incsearch = true
-
--- 启用忽略大小写搜索
-opt.ignorecase = true
-
--- 启用智能大小写搜索
-opt.smartcase = true
-
--- 启用自动缩进
-opt.autoindent = true
-
--- 启用智能缩进
-opt.smartindent = true
+-- 折叠配置：使用 Treesitter 保证折叠稳定性
+-- 解决你遇到的 zc 失效问题
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
+opt.foldtext = ""
+opt.foldcolumn = "0"
+opt.foldlevelstart = 99

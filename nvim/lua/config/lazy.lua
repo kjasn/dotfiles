@@ -36,8 +36,8 @@ require("lazy").setup({
 		"lazyvim.plugins.extras.lang.python",
 		"lazyvim.plugins.extras.lang.typescript",
 		"lazyvim.plugins.extras.lang.react",
+		"lazyvim.plugins.extras.lang.vue",
 		"lazyvim.plugins.extras.lang.json",
-		-- "lazyvim.plugins.extras.lang.vue",
 		-- "lazyvim.plugins.extras.lang.css",
 	},
 	defaults = {
