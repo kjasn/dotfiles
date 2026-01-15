@@ -186,10 +186,10 @@ export PATH=$PATH:$HOME/.go/bin
 export HOMEBREW_AUTO_UPDATE_SECS=5184000
 
 # opencode
-export PATH=/Users/kjasn/.opencode/bin:$PATH
+export PATH=$PATH:$HOME/.opencode/bin
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 # Added by Antigravity
-export PATH="/Users/cltx/.antigravity/antigravity/bin:$PATH"
+export PATH=$PATH:$HOME/.antigravity/antigravity/bin:$PATH
 alias lzd='lazydocker'
