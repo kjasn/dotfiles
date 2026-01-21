@@ -1,9 +1,6 @@
 # 跳过系统级的 compinit，让 Zim 来处理补全初始化
 skip_global_compinit=1
 
-# MacOS 环境变量配置
-export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
-
 # Homebrew 环境变量
 if [[ $(uname -m) == "arm64" ]]; then
     # Apple Silicon Mac
@@ -178,7 +175,6 @@ export EDITOR='nvim'
 
 # Protoc
 export PATH="$PATH:$HOME/.local/bin"
-export PATH=$PATH:$HOME/.go/bin
 
 # PowerLevel10k 配置文件
 # 运行 `p10k configure` 来生成配置文件
@@ -191,5 +187,5 @@ export PATH=$PATH:$HOME/.opencode/bin
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 # Added by Antigravity
-export PATH=$PATH:$HOME/.antigravity/antigravity/bin:$PATH
+export PATH=$PATH:$HOME/.antigravity/antigravity/bin
 alias lzd='lazydocker'
