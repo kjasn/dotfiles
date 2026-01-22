@@ -38,6 +38,8 @@ chmod +x ./install.sh
 - **PowerLevel10k**: 不喜欢 zim 官方文档的主题，所以换成了 PowerLevel10k
 - **Tmux**: 好用，窗口多开（虽然通常终端都自带了，但是 tmux 可以搭配 `vim-navigator` 插件切换光标的位置），detach 后也能继续任务
 - **Homebrew**: 必装
+- 终端模拟器：`ghostty`，毛玻璃背景，光标修改为蕾姆发色(#96C4FE)，字体为`Monaco`和`Maple Mono NF CN`
+  > 官方设定为水蓝色（#66FFE6)，与动漫中色差过大，故没有选用
 
 ---
 
