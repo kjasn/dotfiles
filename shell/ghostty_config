@@ -52,8 +52,8 @@ palette = 15=#ffffff
 background = 1e222a
 # 与 palette 7 相同，提高对比度
 foreground = dcdfe4
-# 使用黄色作为光标颜色，更容易识别
-cursor-color = e5c07b
+# 光标修改为 蕾姆(Rem) 发色
+cursor-color = 9AC4EF
 # 调整选择背景色，提高对比度
 selection-background = 405060
 # 调整选择前景色
