@@ -32,6 +32,7 @@ require("lazy").setup({
 		},
 	},
 	extras = {
+		"lazyvim.plugins.extras.coding.copilot-chat",
 		"lazyvim.plugins.extras.lang.go",
 		"lazyvim.plugins.extras.lang.python",
 		"lazyvim.plugins.extras.lang.typescript",

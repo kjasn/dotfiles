@@ -22,3 +22,5 @@ opt.foldlevel = 99
 opt.foldtext = ""
 opt.foldcolumn = "0"
 opt.foldlevelstart = 99
+
+opt.laststatus = 3
