@@ -5,7 +5,6 @@ return {
 	keys = {
 		{
 			"<leader>E",
-			-- ":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>:lua MiniFiles.reveal_cwd()<cr>",
 			":lua MiniFiles.open()<cr>",
 			desc = "File Structure(cwd)",
 		},
