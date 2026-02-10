@@ -12,8 +12,6 @@ fi
 
 # go
 export PATH="$(go env GOPATH)/bin:${PATH}"
-# export PATH=$PATH:/usr/local/go/bin
-# export GOPATH=$HOME/.go
 
 # fnm
 eval "$(fnm env --use-on-cd)"
@@ -173,19 +171,10 @@ alias ct="cloudflared tunnel"
 export EDITOR='nvim'
 # export VISUAL='nvim'
 
-# Protoc
-export PATH="$PATH:$HOME/.local/bin"
 
 # PowerLevel10k 配置文件
 # 运行 `p10k configure` 来生成配置文件
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export HOMEBREW_AUTO_UPDATE_SECS=5184000
 
-# opencode
-export PATH=$PATH:$HOME/.opencode/bin
-
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
-
-# Added by Antigravity
-export PATH=$PATH:$HOME/.antigravity/antigravity/bin
 alias lzd='lazydocker'
