@@ -21,31 +21,22 @@ return {
 								unusedwrite = true,
 								unusedvariable = true,
 							},
+
 							staticcheck = true,
+							-- Performance optimization for large projects
+							completeUnimported = true,
+							usePlaceholders = true,
+							-- Disable expensive operations in large projects
+							directoryFilters = { "-.git", "-.vscode", "-.idea", "-node_modules" },
 						},
 					},
 				},
+				rust_analyzer = {},
 				eslint = {},
 				vtsls = {},
-				-- vue_ls = {
-				-- 	init_options = {
-				-- 		typescript = {
-				-- 			tsdk = vim.fn.stdpath("data") .. "/mason/packages/vtsls/node_modules/@vtsls/language-server/node_modules/typescript/lib",
-				-- 		},
-				-- 	},
-				-- },
+				stylua = {},
 			},
-			setup = {
-				-- eslint = function()
-				-- 	Snacks.util.lsp.on(function(bufnr, client)
-				-- 		if client and client.name == "eslint" then
-				-- 			client.server_capabilities.documentFormattingProvider = true
-				-- 		elseif client and client.name == "tsserver" then
-				-- 			client.server_capabilities.documentFormattingProvider = false
-				-- 		end
-				-- 	end)
-				-- end,
-			},
+			setup = {},
 		},
 	},
 }
