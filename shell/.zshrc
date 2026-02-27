@@ -178,3 +178,7 @@ export EDITOR='nvim'
 export HOMEBREW_AUTO_UPDATE_SECS=5184000
 
 alias lzd='lazydocker'
+
+# rust
+export PATH="$HOME/.cargo/bin:$PATH"
+
