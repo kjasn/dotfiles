@@ -105,6 +105,22 @@ run = "layout floating"
 if.app-id = "com.apple.MobileSMS"
 run = "layout floating"
 
+[[on-window-detected]]
+if.app-id = "com.apple.weather"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.depthpicture.PixPin"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "app.clashmac"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.dwarvesv.minimalbar"
+run = "layout floating"
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -134,6 +150,9 @@ outer.right = 5
 cmd-h = []  # Disable "hide application"
 cmd-alt-h = []  # Disable "hide others"
 alt-v = []
+alt-shift-u = "join-with left"
+alt-shift-i = "join-with right"
+alt-shift-v = "layout tiles vertical"
 
 # All possible keys:
 # - Letters.        a, b, c, ..., z
