@@ -21,7 +21,7 @@ restore_backups() {
   echo -e "\n${GREEN}=== 恢复备份文件 ===${NC}"
   
   # 查找并恢复备份文件
-  for backup_file in ~/.zshrc.bak.* ~/.gitconfig.bak.* ~/.tmux.conf.bak.* ~/.config/nvim.bak.*; do
+  for backup_file in ~/.zshrc.bak.* ~/.gitconfig.bak.* ~/.tmux.conf.bak.* ~/.config/nvim.bak.* ~/.config/aerospace/aerospace.toml.bak.* ~/.config/ghostty/config.bak.*; do
     if [ -e "$backup_file" ]; then
       original_file="${backup_file%.bak.*}"
       echo -e "${YELLOW}恢复备份: $backup_file -> $original_file${NC}"
@@ -54,6 +54,16 @@ remove_symlinks() {
     echo -e "${YELLOW}删除符号链接: ~/.config/nvim${NC}"
     rm ~/.config/nvim
   fi
+
+  if [ -L ~/.config/aerospace/aerospace.toml ]; then
+    echo -e "${YELLOW}删除符号链接: ~/.config/aerospace/aerospace.toml${NC}"
+    rm ~/.config/aerospace/aerospace.toml
+  fi
+
+  if [ -L ~/.config/ghostty/config ]; then
+    echo -e "${YELLOW}删除符号链接: ~/.config/ghostty/config${NC}"
+    rm ~/.config/ghostty/config
+  fi
 }
 
 
@@ -63,9 +73,6 @@ uninstall_fonts() {
   
   # 查找并删除 Maple Mono NF CN 字体
   local font_dir="$HOME/Library/Fonts"
-  local system_font_dir="/System/Library/Fonts"
-  local library_font_dir="/Library/Fonts"
-  
   # 删除用户字体目录中的字体
   if [ -d "$font_dir" ]; then
     for font_file in "$font_dir"/MapleMono-NF-CN*.ttf; do
