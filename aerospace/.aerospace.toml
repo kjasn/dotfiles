@@ -66,6 +66,10 @@ if.app-id = "com.tencent.xinWeChat"
 run = "layout floating"
 
 [[on-window-detected]]
+if.app-id = "com.tencent.WeWorkMac"
+run = "layout floating"
+
+[[on-window-detected]]
 if.app-id = "com.tencent.meeting"
 run = "layout floating"
 
@@ -98,6 +102,14 @@ if.app-id = "com.apple.Music"
 run = "layout floating"
 
 [[on-window-detected]]
+if.app-id = "com.apple.Passwords"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.apple.AddressBook"
+run = "layout floating"
+
+[[on-window-detected]]
 if.app-id = "com.apple.QuickTimePlayerX"
 run = "layout floating"
 
@@ -126,6 +138,10 @@ if.app-id = "com.electron.lark"
 run = "layout floating"
 
 [[on-window-detected]]
+if.app-id = "com.electron.lark.helper"
+run = "layout floating"
+
+[[on-window-detected]]
 if.app-id = "com.apple.finder"
 run = "layout floating"
 
@@ -142,7 +158,31 @@ if.app-id = "com.apple.weather"
 run = "layout floating"
 
 [[on-window-detected]]
+if.app-id = "com.apple.reminders"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.apple.Photos"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.apple.games"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.apple.ActivityMonitor"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.apple.podcasts"
+run = "layout floating"
+
+[[on-window-detected]]
 if.app-id = "com.depthpicture.PixPin"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "dev.kdrag0n.MacVirt"  # OrbStack
 run = "layout floating"
 
 [[on-window-detected]]
@@ -152,6 +192,23 @@ run = "layout floating"
 [[on-window-detected]]
 if.app-id = "com.dwarvesv.minimalbar"
 run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "app.clashmac.dashboard"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.mrrss.app"
+run = "layout floating"
+
+# put these to workspace S everytime open it
+[[on-window-detected]]
+if.app-id = "com.mitchellh.ghostty"
+run = "move-node-to-workspace S"
+
+[[on-window-detected]]
+if.app-id = "com.microsoft.VSCode"
+run = "move-node-to-workspace S"
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -182,6 +239,7 @@ outer.right = 5
 cmd-h = []                            # Disable "hide application"
 cmd-alt-h = []                        # Disable "hide others"
 alt-v = []
+alt-m = "fullscreen"
 alt-shift-u = "join-with left"
 alt-shift-i = "join-with right"
 alt-shift-v = "layout tiles vertical"
