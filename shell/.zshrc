@@ -10,6 +10,9 @@ else
     eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+# config dir
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # go
 export PATH="$(go env GOPATH)/bin:${PATH}"
 
@@ -166,6 +169,8 @@ alias bs="brew services"
 alias cc="claude" # claude code
 alias oc="opencode"
 alias ct="cloudflared tunnel"
+alias tma="tmux attach"
+alias tmn="tmux new -s"
 
 # User configuration
 export EDITOR='nvim'
@@ -181,4 +186,5 @@ alias lzd='lazydocker'
 
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"
+
 

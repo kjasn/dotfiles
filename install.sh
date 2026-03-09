@@ -30,7 +30,8 @@ create_symlink() {
         fi
 
         # 备份原有文件/链接
-        local backup_file="${target_file}.bak.$(date +%Y%m%d%H%M%S)"
+        local backup_file
+        backup_file="${target_file}.bak.$(date +%Y%m%d%H%M%S)"
         echo -e "${YELLOW}备份原有文件：$target_file -> $backup_file${NC}"
         mv "$target_file" "$backup_file"
     fi
@@ -55,35 +56,15 @@ install_homebrew() {
         # 添加 Homebrew 到 PATH（针对 Apple Silicon Mac）
         if [[ $(uname -m) == "arm64" ]]; then
             echo -e "${YELLOW}检测到 Apple Silicon Mac，添加 Homebrew 到 PATH...${NC}"
-            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>~/.zprofile
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-        fi
-    else
-        echo -e "${GREEN}Homebrew 已安装${NC}"
-        # 更新 Homebrew
-        echo -e "${YELLOW}更新 Homebrew...${NC}"
-        brew update
-    fi
-}
-
-# 检查并安装 Homebrew
-install_homebrew() {
-    echo -e "\n${GREEN}=== 检查 Homebrew ===${NC}"
-    if ! command -v brew >/dev/null 2>&1; then
-        echo -e "${YELLOW}Homebrew 未安装，正在安装...${NC}"
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-        # 添加 Homebrew 到 PATH（针对 Apple Silicon Mac）
-        if [[ $(uname -m) == "arm64" ]]; then
-            echo -e "${YELLOW}检测到 Apple Silicon Mac，添加 Homebrew 到 PATH...${NC}"
-            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>~/.zprofile
+            echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >>~/.zprofile
             eval "$(/opt/homebrew/bin/brew shellenv)"
         fi
     else
         echo -e "${GREEN}Homebrew 已安装${NC}"
 
         # 获取当前 Homebrew 版本
-        local current_version=$(brew --version | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+        local current_version
+        current_version=$(brew --version | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
         echo -e "${BLUE}当前 Homebrew 版本: ${current_version}${NC}"
 
         # 询问用户是否更新
@@ -154,6 +135,50 @@ install_prerequisites() {
     fi
 }
 
+# 安装 AeroSpace 与 borders
+install_aerospace() {
+    echo -e "\n${GREEN}=== 安装 AeroSpace 与 borders ===${NC}"
+
+    read -r -p "是否安装 AeroSpace? [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        if ! brew list --cask nikitabobko/tap/aerospace >/dev/null 2>&1; then
+            echo -e "${YELLOW}安装 AeroSpace...${NC}"
+            if brew install --cask nikitabobko/tap/aerospace; then
+                echo -e "${GREEN}AeroSpace 安装完成${NC}"
+            else
+                echo -e "${RED}AeroSpace 安装失败${NC}"
+            fi
+        else
+            echo -e "${GREEN}AeroSpace 已安装${NC}"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 AeroSpace 安装${NC}"
+        ;;
+    esac
+
+    read -r -p "是否安装 borders? [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        if ! brew list borders >/dev/null 2>&1; then
+            echo -e "${YELLOW}安装 borders...${NC}"
+            brew tap FelixKratz/formulae >/dev/null 2>&1 || true
+            if brew install borders; then
+                echo -e "${GREEN}borders 安装完成${NC}"
+            else
+                echo -e "${RED}borders 安装失败${NC}"
+            fi
+        else
+            echo -e "${GREEN}borders 已安装${NC}"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 borders 安装${NC}"
+        ;;
+    esac
+}
+
 # 可选安装 lazygit
 install_lazygit() {
     echo -e "\n${GREEN}=== 可选：安装 lazygit ===${NC}"
@@ -198,7 +223,8 @@ check_treesitter_cli() {
     echo -e "\n${BLUE}=== Tree-sitter CLI 检查 ===${NC}"
 
     if command -v tree-sitter >/dev/null 2>&1; then
-        local ts_version=$(tree-sitter --version 2>/dev/null | head -n1)
+        local ts_version
+        ts_version=$(tree-sitter --version 2>/dev/null | head -n1)
         echo -e "${GREEN}✓ tree-sitter CLI 已安装: ${ts_version}${NC}"
     else
         echo -e "${YELLOW}⚠️  tree-sitter CLI 未安装${NC}"
@@ -384,22 +410,30 @@ install_ghostty_config() {
     read -r -p "是否将仓库的 Ghostty 配置部署到用户配置 (~/.config/ghostty/config)？ [y/N] " yn
     case "$yn" in
     [Yy]*)
-        local target_dir="$HOME/.config/ghostty"
-        local target_file="$target_dir/config"
-        mkdir -p "$target_dir"
-        if [ -e "$target_file" ]; then
-            local backup="$target_file.bak.$(date +%Y%m%d%H%M%S)"
-            echo -e "${YELLOW}检测到已有 Ghostty 配置，备份为: $backup${NC}"
-            mv "$target_file" "$backup"
-        fi
-        if cp -f "$repo_conf" "$target_file"; then
-            echo -e "${GREEN}已将仓库的 Ghostty 配置部署到 $target_file${NC}"
-        else
-            echo -e "${RED}部署 Ghostty 配置失败，请检查权限${NC}"
-        fi
+        create_symlink "$repo_conf" "$HOME/.config/ghostty/config"
         ;;
     *)
         echo -e "${YELLOW}已跳过 Ghostty 配置部署${NC}"
+        ;;
+    esac
+}
+
+# 可选：部署 AeroSpace 配置
+install_aerospace_config() {
+    echo -e "\n${GREEN}=== 可选：部署 AeroSpace 配置 ===${NC}"
+    local repo_conf="$HOME/dotfiles/aerospace/.aerospace.toml"
+    if [ ! -f "$repo_conf" ]; then
+        echo -e "${YELLOW}警告：仓库中未找到 $repo_conf，跳过 AeroSpace 配置部署${NC}"
+        return 0
+    fi
+
+    read -r -p "是否将仓库的 AeroSpace 配置部署到 ~/.config/aerospace/aerospace.toml ？ [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        create_symlink "$repo_conf" "$HOME/.config/aerospace/aerospace.toml"
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 AeroSpace 配置部署${NC}"
         ;;
     esac
 }
@@ -428,6 +462,7 @@ verify_installation() {
         "$HOME/.zimrc:$HOME/dotfiles/shell/.zimrc"
         "$HOME/.config/tmux/tmux.conf.local:$HOME/dotfiles/tmux/.tmux.conf.local"
         "$HOME/.config/nvim:$HOME/dotfiles/nvim"
+        "$HOME/.config/aerospace/aerospace.toml:$HOME/dotfiles/aerospace/.aerospace.toml"
     )
 
     for symlink_info in "${symlinks[@]}"; do
@@ -478,16 +513,22 @@ main() {
     # 安装基础依赖
     install_prerequisites
 
+    # 安装 AeroSpace 与 borders
+    install_aerospace
+
     # 安装 lazygit （可选）
     install_lazygit
 
     # 可选：部署 Ghostty 配置
     install_ghostty_config
 
+    # 可选：部署 AeroSpace 配置
+    install_aerospace_config
+
     # 安装 Zim
     install_zim
 
-    # 安装 fnm（可选）
+    # 可选：安装 fnm
     install_fnm
 
     # 安装 oh my tmux

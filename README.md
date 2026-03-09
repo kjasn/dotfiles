@@ -34,6 +34,7 @@ chmod +x ./install.sh
 ### 🛠️ 开发环境
 
 - **Neovim + LazyVim**
+- **Aerospace**: 实现平铺式窗口管理，yabai 要关掉 SIP 才能使用，有点麻烦
 - **Zsh + Zim**: 替换掉了 `oh-my-zsh`，据说更快一些，也有人推荐 `fish` 但是我懒得折腾了
 - **PowerLevel10k**: 不喜欢 zim 官方文档的主题，所以换成了 PowerLevel10k
 - **Tmux**: 好用，窗口多开（虽然通常终端都自带了，但是 tmux 可以搭配 `vim-navigator` 插件切换光标的位置），detach 后也能继续任务
@@ -52,6 +53,8 @@ chmod +x ./install.sh
 - 最新版 Neovim
 - Zim Zsh 框架
 - Tmux 插件管理器 (TPM)
+- Aerospace 窗口管理器（可选）
+- borders (AeroSpace 边框工具，可选)
 
 ### 实用脚本
 
@@ -67,6 +70,7 @@ chmod +x ./install.sh
 ## 🗂️ 目录结构
 
 ```bash
+├── aerospace       # aerospace 配置
 ├── install.sh      # 安装脚本
 ├── uninstall.sh    # 卸载脚本
 ├── shell/          # shell 配置 (.zshrc, .zimrc，ghostty_config)
@@ -78,8 +82,6 @@ chmod +x ./install.sh
 │   └── upload-stage-server.sh # 服务器文件上传脚本
 └── README.md       # 说明文档
 ```
-
----
 
 ## 🎯 配置简述
 
@@ -101,6 +103,15 @@ chmod +x ./install.sh
 ### Tmux
 
 本配置使用 `ctrl+q` 作为 `prefix` ，`prefix+h/j/k/l` 可以在不同的 pannel 之间跳转
+
+## Aerospace
+
+在默认配置的基础上，添加了一些自定义配置：
+
+- 设置打开QQ，WeChat，Finder等应用时，窗口自动浮动并调整大小以适应内容
+- 通过 JankyBorders 设置 active App 边框颜色
+- 默认设置 ghostty 和 VS Code 放在 workspace S
+- 禁用 Mac 默认的 `cmd+h`, `cmd-alt-h` 快捷键
 
 ---
 
@@ -134,11 +145,10 @@ map.set("n", "<leader>ff", ":Telescope find_files<CR>", opt)
 
 ### Zsh 配置
 
-编辑 `shell/.zshrc` 添加环境变量或别名：
+设置 `XDG_CONFIG_HOME` 环境变量来指定配置文件位置
 
-```bash
-# 示例：添加别名
-alias ll="ls -la"
+```shell
+export XDG_CONFIG_HOME="$HOME/.config"
 ```
 
 ### Tmux 配置
