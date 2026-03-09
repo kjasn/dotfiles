@@ -101,6 +101,28 @@ uninstall_homebrew_packages() {
       echo -e "${YELLOW}跳过 Homebrew 包卸载${NC}"
       ;;
   esac
+
+  read -r -p "是否卸载 AeroSpace? [y/N] " yn
+  case "$yn" in
+    [Yy]* )
+      echo -e "${YELLOW}卸载 AeroSpace...${NC}"
+      brew uninstall --cask nikitabobko/tap/aerospace 2>/dev/null || true
+      ;;
+    * )
+      echo -e "${YELLOW}已跳过 AeroSpace 卸载${NC}"
+      ;;
+  esac
+
+  read -r -p "是否卸载 borders? [y/N] " yn
+  case "$yn" in
+    [Yy]* )
+      echo -e "${YELLOW}卸载 borders...${NC}"
+      brew uninstall borders 2>/dev/null || true
+      ;;
+    * )
+      echo -e "${YELLOW}已跳过 borders 卸载${NC}"
+      ;;
+  esac
 }
 
 # 清理缓存和临时文件

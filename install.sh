@@ -135,6 +135,50 @@ install_prerequisites() {
     fi
 }
 
+# 安装 AeroSpace 与 borders
+install_aerospace() {
+    echo -e "\n${GREEN}=== 安装 AeroSpace 与 borders ===${NC}"
+
+    read -r -p "是否安装 AeroSpace? [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        if ! brew list --cask nikitabobko/tap/aerospace >/dev/null 2>&1; then
+            echo -e "${YELLOW}安装 AeroSpace...${NC}"
+            if brew install --cask nikitabobko/tap/aerospace; then
+                echo -e "${GREEN}AeroSpace 安装完成${NC}"
+            else
+                echo -e "${RED}AeroSpace 安装失败${NC}"
+            fi
+        else
+            echo -e "${GREEN}AeroSpace 已安装${NC}"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 AeroSpace 安装${NC}"
+        ;;
+    esac
+
+    read -r -p "是否安装 borders? [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        if ! brew list borders >/dev/null 2>&1; then
+            echo -e "${YELLOW}安装 borders...${NC}"
+            brew tap FelixKratz/formulae >/dev/null 2>&1 || true
+            if brew install borders; then
+                echo -e "${GREEN}borders 安装完成${NC}"
+            else
+                echo -e "${RED}borders 安装失败${NC}"
+            fi
+        else
+            echo -e "${GREEN}borders 已安装${NC}"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 borders 安装${NC}"
+        ;;
+    esac
+}
+
 # 可选安装 lazygit
 install_lazygit() {
     echo -e "\n${GREEN}=== 可选：安装 lazygit ===${NC}"
@@ -468,6 +512,9 @@ main() {
 
     # 安装基础依赖
     install_prerequisites
+
+    # 安装 AeroSpace 与 borders
+    install_aerospace
 
     # 安装 lazygit （可选）
     install_lazygit

@@ -53,7 +53,8 @@ chmod +x ./install.sh
 - 最新版 Neovim
 - Zim Zsh 框架
 - Tmux 插件管理器 (TPM)
-- Aerospace 窗口管理器
+- Aerospace 窗口管理器（可选）
+- borders (AeroSpace 边框工具，可选)
 
 ### 实用脚本
 
@@ -105,7 +106,12 @@ chmod +x ./install.sh
 
 ## Aerospace
 
-在默认配置的基础上，添加了一些自定义配置：设置打开QQ，WeChat，Finder等应用时，窗口自动浮动并调整大小以适应内容；通过 JankyBorders 设置 active App 边框颜色；禁用 Mac 默认的 `cmd+h`, `cmd-alt-h` 快捷键。
+在默认配置的基础上，添加了一些自定义配置：
+
+- 设置打开QQ，WeChat，Finder等应用时，窗口自动浮动并调整大小以适应内容
+- 通过 JankyBorders 设置 active App 边框颜色
+- 默认设置 ghostty 和 VS Code 放在 workspace S
+- 禁用 Mac 默认的 `cmd+h`, `cmd-alt-h` 快捷键
 
 ---
 
