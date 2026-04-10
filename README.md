@@ -39,8 +39,11 @@ chmod +x ./install.sh
 - **PowerLevel10k**: 不喜欢 zim 官方文档的主题，所以换成了 PowerLevel10k
 - **Tmux**: 好用，窗口多开（虽然通常终端都自带了，但是 tmux 可以搭配 `vim-navigator` 插件切换光标的位置），detach 后也能继续任务
 - **Homebrew**: 必装
-- 终端模拟器：`ghostty`，毛玻璃背景，光标修改为蕾姆发色(#96C4FE)，字体为`Monaco`和`Maple Mono NF CN`
-  > 官方设定为水蓝色（#66FFE6)，与动漫中色差过大，故没有选用
+- 终端模拟器：
+  - `ghostty`，毛玻璃背景，光标修改为蕾姆发色(#96C4FE)，字体为`Monaco`和`Maple Mono NF CN`
+  - `Kitty`: 可选配置文件 `shell/kitty/kitty.conf`、`shell/kitty/current-theme.conf`
+
+> 官方设定为水蓝色（#66FFE6)，与动漫中色差过大，故没有选用
 
 ---
 
@@ -55,6 +58,7 @@ chmod +x ./install.sh
 - Tmux 插件管理器 (TPM)
 - Aerospace 窗口管理器（可选）
 - borders (AeroSpace 边框工具，可选)
+- Kitty 配置（可选）
 
 ### 实用脚本
 
@@ -73,7 +77,7 @@ chmod +x ./install.sh
 ├── aerospace       # aerospace 配置
 ├── install.sh      # 安装脚本
 ├── uninstall.sh    # 卸载脚本
-├── shell/          # shell 配置 (.zshrc, .zimrc，ghostty_config)
+├── shell/          # shell 配置 (.zshrc, .zimrc，ghostty_config，kitty/)
 ├── nvim/           # LazyVim 配置
 ├── git/            # Git 配置
 ├── tmux/           # Tmux 配置

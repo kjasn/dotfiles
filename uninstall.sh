@@ -21,7 +21,7 @@ restore_backups() {
   echo -e "\n${GREEN}=== 恢复备份文件 ===${NC}"
   
   # 查找并恢复备份文件
-  for backup_file in ~/.zshrc.bak.* ~/.gitconfig.bak.* ~/.tmux.conf.bak.* ~/.config/nvim.bak.* ~/.config/aerospace/aerospace.toml.bak.* ~/.config/ghostty/config.bak.*; do
+  for backup_file in ~/.zshrc.bak.* ~/.gitconfig.bak.* ~/.tmux.conf.bak.* ~/.config/nvim.bak.* ~/.config/aerospace/aerospace.toml.bak.* ~/.config/ghostty/config.bak.* ~/.config/kitty/kitty.conf.bak.* ~/.config/kitty/current-theme.conf.bak.*; do
     if [ -e "$backup_file" ]; then
       original_file="${backup_file%.bak.*}"
       echo -e "${YELLOW}恢复备份: $backup_file -> $original_file${NC}"
@@ -63,6 +63,16 @@ remove_symlinks() {
   if [ -L ~/.config/ghostty/config ]; then
     echo -e "${YELLOW}删除符号链接: ~/.config/ghostty/config${NC}"
     rm ~/.config/ghostty/config
+  fi
+
+  if [ -L ~/.config/kitty/kitty.conf ]; then
+    echo -e "${YELLOW}删除符号链接: ~/.config/kitty/kitty.conf${NC}"
+    rm ~/.config/kitty/kitty.conf
+  fi
+
+  if [ -L ~/.config/kitty/current-theme.conf ]; then
+    echo -e "${YELLOW}删除符号链接: ~/.config/kitty/current-theme.conf${NC}"
+    rm ~/.config/kitty/current-theme.conf
   fi
 }
 

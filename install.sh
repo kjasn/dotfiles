@@ -418,6 +418,49 @@ install_ghostty_config() {
     esac
 }
 
+# 可选：部署 Kitty 配置
+install_kitty_config() {
+    echo -e "\n${GREEN}=== 可选：部署 Kitty 配置 ===${NC}"
+    local repo_conf="$HOME/dotfiles/shell/kitty/kitty.conf"
+    local repo_theme_conf="$HOME/dotfiles/shell/kitty/current-theme.conf"
+    local target_conf="$HOME/.config/kitty/kitty.conf"
+    local target_theme_conf="$HOME/.config/kitty/current-theme.conf"
+
+    if [ ! -f "$repo_conf" ]; then
+        echo -e "${YELLOW}警告：仓库中未找到 $repo_conf，跳过 Kitty 配置部署${NC}"
+        return 0
+    fi
+
+    read -r -p "是否将仓库的 Kitty 配置部署到用户配置 (~/.config/kitty/kitty.conf)？ [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        if [ -e "$target_conf" ] || [ -L "$target_conf" ]; then
+            if [ -L "$target_conf" ] && [ "$(readlink "$target_conf")" = "$repo_conf" ]; then
+                echo -e "${YELLOW}检测到已正确链接到仓库 Kitty 配置，跳过重复部署${NC}"
+                return 0
+            fi
+
+            # 覆盖前备份原有 kitty.conf
+            local backup_conf
+            backup_conf="${target_conf}.bak.$(date +%Y%m%d%H%M%S)"
+            echo -e "${YELLOW}备份原有 kitty.conf：$target_conf -> $backup_conf${NC}"
+            mv "$target_conf" "$backup_conf"
+        fi
+
+        create_symlink "$repo_conf" "$target_conf"
+
+        if [ ! -f "$repo_theme_conf" ]; then
+            echo -e "${YELLOW}警告：仓库中未找到 $repo_theme_conf，跳过 current-theme.conf 部署${NC}"
+        else
+            create_symlink "$repo_theme_conf" "$target_theme_conf"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 Kitty 配置部署${NC}"
+        ;;
+    esac
+}
+
 # 可选：部署 AeroSpace 配置
 install_aerospace_config() {
     echo -e "\n${GREEN}=== 可选：部署 AeroSpace 配置 ===${NC}"
@@ -465,6 +508,12 @@ verify_installation() {
         "$HOME/.config/aerospace/aerospace.toml:$HOME/dotfiles/aerospace/.aerospace.toml"
     )
 
+    # 可选配置校验（未部署也不影响核心安装）
+    local optional_symlinks=(
+        "$HOME/.config/kitty/kitty.conf:$HOME/dotfiles/shell/kitty/kitty.conf"
+        "$HOME/.config/kitty/current-theme.conf:$HOME/dotfiles/shell/kitty/current-theme.conf"
+    )
+
     for symlink_info in "${symlinks[@]}"; do
         local target="${symlink_info%%:*}"
         local source="${symlink_info##*:}"
@@ -487,6 +536,29 @@ verify_installation() {
         else
             echo -e "${RED}✗ $target 未创建为符号链接${NC}"
             all_good=false
+        fi
+    done
+
+    for symlink_info in "${optional_symlinks[@]}"; do
+        local target="${symlink_info%%:*}"
+        local source="${symlink_info##*:}"
+        if [ -L "$target" ]; then
+            # readlink returns the symlink target (may be relative)
+            local dest
+            dest=$(readlink "$target" 2>/dev/null || true)
+
+            # If dest is a relative path, make it absolute relative to the symlink directory
+            if [ -n "$dest" ] && [ "${dest#/}" = "$dest" ]; then
+                dest="$(cd "$(dirname "$target")" && printf "%s/%s" "$PWD" "$dest")"
+            fi
+
+            if [ "$dest" = "$source" ]; then
+                echo -e "${GREEN}✓ $target 符号链接正确${NC}"
+            else
+                echo -e "${YELLOW}⚠ $target 符号链接异常（期望: $source, 实际: $dest）${NC}"
+            fi
+        else
+            echo -e "${YELLOW}⚠ $target 未部署（可选）${NC}"
         fi
     done
 
@@ -521,6 +593,9 @@ main() {
 
     # 可选：部署 Ghostty 配置
     install_ghostty_config
+
+    # 可选：部署 Kitty 配置
+    install_kitty_config
 
     # 可选：部署 AeroSpace 配置
     install_aerospace_config
