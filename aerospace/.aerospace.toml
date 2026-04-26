@@ -5,9 +5,9 @@ config-version = 2
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  # JankyBorders has a built-in detection of already running process,
-  # so it won't be run twice on AeroSpace restart
-  "exec-and-forget borders active_color=0xffffe600 inactive_color=0xff494d64 width=5.0",
+    # JankyBorders has a built-in detection of already running process,
+    # so it won't be run twice on AeroSpace restart
+    "exec-and-forget borders active_color=0xffffe600 inactive_color=0xff494d64 width=5.0",
 ]
 
 # Start AeroSpace at login
@@ -99,6 +99,10 @@ run = "layout floating"
 
 [[on-window-detected]]
 if.app-id = "com.crossutility.quantumult-x"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.apple.Preview"
 run = "layout floating"
 
 [[on-window-detected]]
@@ -194,7 +198,7 @@ if.app-id = "co.macsvn.macsvn.macSvn"
 run = "layout floating"
 
 [[on-window-detected]]
-if.app-id = "dev.kdrag0n.MacVirt"  # OrbStack
+if.app-id = "dev.kdrag0n.MacVirt" # OrbStack
 run = "layout floating"
 
 [[on-window-detected]]
@@ -214,7 +218,20 @@ if.app-id = "com.follow.clash"
 run = "layout floating"
 
 [[on-window-detected]]
+if.app-id = "com.valvesoftware.steam.helper"
+run = "layout floating"
+
+
+[[on-window-detected]]
+if.app-id = "com.valvesoftware.steam"
+run = "layout floating"
+
+[[on-window-detected]]
 if.app-id = "com.dwarvesv.minimalbar"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.microsoft.OneDrive-mac"
 run = "layout floating"
 
 [[on-window-detected]]
@@ -247,6 +264,10 @@ run = "move-node-to-workspace D"
 if.app-id = "com.kingsoft.wpsoffice.mac.global"
 run = "move-node-to-workspace D"
 
+[[on-window-detected]]
+if.app-id = "org.krita"
+run = "move-node-to-workspace F"
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -273,8 +294,8 @@ outer.right = 5
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
-cmd-h = []  # Disable "hide application"
-cmd-alt-h = []  # Disable "hide others"
+cmd-h = []                            # Disable "hide application"
+cmd-alt-h = []                        # Disable "hide others"
 alt-v = []
 alt-m = "fullscreen"
 alt-shift-u = "join-with left"
@@ -338,7 +359,7 @@ alt-equal = "resize smart +50"
 # alt-7 = 'workspace 7'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
-alt-a = "workspace A"  # In your config, you can drop workspace bindings that you don't need
+alt-a = "workspace A" # In your config, you can drop workspace bindings that you don't need
 # alt-b = 'workspace B'
 # alt-c = 'workspace C'
 alt-d = "workspace D"
@@ -406,11 +427,11 @@ alt-shift-semicolon = "mode service"
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 esc = ["reload-config", "mode main"]
-r = ["flatten-workspace-tree", "mode main"]  # reset layout
+r = ["flatten-workspace-tree", "mode main"] # reset layout
 f = [
-  "layout floating tiling",
-  "mode main",
-]  # Toggle between floating and tiling layout
+    "layout floating tiling",
+    "mode main",
+] # Toggle between floating and tiling layout
 backspace = ["close-all-windows-but-current", "mode main"]
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
