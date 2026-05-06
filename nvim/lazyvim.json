@@ -1,6 +1,5 @@
 {
   "extras": [
-    "lazyvim.plugins.extras.ai.avante",
     "lazyvim.plugins.extras.ai.copilot",
     "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.editor.outline",
@@ -10,7 +9,6 @@
     "lazyvim.plugins.extras.lang.markdown",
     "lazyvim.plugins.extras.lang.python",
     "lazyvim.plugins.extras.lang.tailwind",
-    "lazyvim.plugins.extras.lang.toml",
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.lang.vue",
     "lazyvim.plugins.extras.lang.yaml",
@@ -24,3 +22,4 @@
   },
   "version": 8
 }
+
