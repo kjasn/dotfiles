@@ -14,10 +14,7 @@ fi
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # go
-export PATH="$(go env GOPATH)/bin:${PATH}"
-
-# fnm
-eval "$(fnm env --use-on-cd)"
+# export PATH="$(go env GOPATH)/bin:${PATH}"
 
 # zoxide - smart cd command
 eval "$(zoxide init zsh)"
@@ -164,10 +161,10 @@ alias cls="clear"
 alias vim=nvim
 alias ez="exec zsh"
 alias lg="lazygit"
-alias tma="tmux attach"
 alias bs="brew services"
 alias cc="claude" # claude code
 alias oc="opencode"
+alias cx="codex"
 alias ct="cloudflared tunnel"
 alias tma="tmux attach"
 alias tmn="tmux new -s"

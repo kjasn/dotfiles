@@ -26,7 +26,7 @@ window-padding-x = 15
 window-padding-y = 15
 window-save-state = "always"
 
-background-opacity = 0.9
+background-opacity = 0.8
 # 背景不透明度
 background-blur-radius = 25
 # 背景模糊半径
@@ -38,3 +38,4 @@ keybind = global:alt+grave_accent=toggle_quick_terminal
 mouse-shift-capture = false
 
 theme = Catppuccin Macchiato
+
