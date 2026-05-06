@@ -11,7 +11,7 @@ after-startup-command = [
 ]
 
 # Start AeroSpace at login
-start-at-login = false
+start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
@@ -57,6 +57,10 @@ persistent-workspaces = ["A", "D", "F", "S"]
 on-mode-changed = []
 
 # Float specified apps so they don't affect tiling layout
+[[on-window-detected]]
+if.app-id = "com.openai.codex"
+run = "layout floating"
+
 [[on-window-detected]]
 if.app-id = "com.tencent.qq"
 run = "layout floating"
