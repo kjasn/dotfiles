@@ -86,7 +86,7 @@ install_prerequisites() {
 
     # 安装基础工具
     echo -e "${YELLOW}安装基础工具...${NC}"
-    if brew install git zsh curl fzf ripgrep fd tmux; then
+    if brew install git zsh curl fzf ripgrep fd tmux mise; then
         echo -e "${GREEN}基础工具安装完成${NC}"
     else
         echo -e "${RED}基础工具安装失败，请检查 Homebrew 状态${NC}"
@@ -319,19 +319,38 @@ install_zim() {
     fi
 }
 
-# 可选安装 fnm
-install_fnm() {
-    echo -e "\n${GREEN}=== 可选：安装 fnm (Fast Node Manager) ===${NC}"
-    if ! command -v fnm >/dev/null 2>&1; then
-        echo -e "${YELLOW}fnm 未安装，正在通过 Homebrew 安装...${NC}"
-        if brew install fnm; then
-            echo -e "${GREEN}fnm 安装完成${NC}"
-        else
-            echo -e "${RED}fnm 安装失败${NC}"
-        fi
-    else
-        echo -e "${GREEN}fnm 已安装${NC}"
+# 安装 mise 配置
+install_mise_config() {
+    echo -e "\n${GREEN}=== 安装 mise 配置 ===${NC}"
+    local repo_conf="$HOME/dotfiles/mise/config.toml"
+    local target_conf="$HOME/.config/mise/config.toml"
+
+    if [ ! -f "$repo_conf" ]; then
+        echo -e "${YELLOW}警告：仓库中未找到 $repo_conf，跳过 mise 配置部署${NC}"
+        return 0
     fi
+
+    create_symlink "$repo_conf" "$target_conf"
+
+    if ! command -v mise >/dev/null 2>&1; then
+        echo -e "${RED}错误：mise 未安装或不在 PATH 中，无法安装运行时依赖${NC}"
+        return 1
+    fi
+
+    read -r -p "是否通过 mise 安装 config.toml 中声明的运行时依赖? [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        echo -e "${YELLOW}正在通过 mise 安装运行时依赖...${NC}"
+        if mise install; then
+            echo -e "${GREEN}mise 运行时依赖安装完成${NC}"
+        else
+            echo -e "${RED}mise 运行时依赖安装失败${NC}"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 mise 运行时依赖安装${NC}"
+        ;;
+    esac
 }
 
 # 安装 oh my tmux
@@ -488,7 +507,7 @@ verify_installation() {
     local all_good=true
 
     # 检查关键工具
-    local tools=("nvim" "tmux" "zsh" "git" "fzf" "rg" "fd" "zoxide")
+    local tools=("nvim" "tmux" "zsh" "git" "fzf" "rg" "fd" "zoxide" "mise")
     for tool in "${tools[@]}"; do
         if command -v "$tool" >/dev/null 2>&1; then
             echo -e "${GREEN}✓ $tool 已安装${NC}"
@@ -506,6 +525,7 @@ verify_installation() {
         "$HOME/.config/tmux/tmux.conf.local:$HOME/dotfiles/tmux/.tmux.conf.local"
         "$HOME/.config/nvim:$HOME/dotfiles/nvim"
         "$HOME/.config/aerospace/aerospace.toml:$HOME/dotfiles/aerospace/.aerospace.toml"
+        "$HOME/.config/mise/config.toml:$HOME/dotfiles/mise/config.toml"
     )
 
     # 可选配置校验（未部署也不影响核心安装）
@@ -603,8 +623,8 @@ main() {
     # 安装 Zim
     install_zim
 
-    # 可选：安装 fnm
-    install_fnm
+    # 安装 mise 配置
+    install_mise_config
 
     # 安装 oh my tmux
     install_oh_my_tmux
