@@ -31,11 +31,7 @@ return {
 						},
 					},
 				},
-				eslint = {},
-				vtsls = {},
-				stylua = {},
 			},
-			setup = {},
 		},
 	},
 }

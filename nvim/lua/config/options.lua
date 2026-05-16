@@ -14,10 +14,7 @@ opt.expandtab = true -- 将 Tab 转换为垂直空格
 opt.wrap = true -- 启用自动换行
 opt.linebreak = true -- 不在单词中间断行
 
--- 折叠配置：使用 Treesitter 保证折叠稳定性
--- 解决你遇到的 zc 失效问题
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- Keep folds open by default; let LazyVim choose the guarded foldexpr.
 opt.foldlevel = 99
 opt.foldtext = ""
 opt.foldcolumn = "0"

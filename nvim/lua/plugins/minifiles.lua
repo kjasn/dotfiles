@@ -1,6 +1,5 @@
 return {
 	"nvim-mini/mini.nvim",
-	version = "*",
 	lazy = true,
 	keys = {
 		{

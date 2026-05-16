@@ -12,6 +12,7 @@ return {
 		opts = {
 			custom_highlights = function(colors)
 				return {
+					NvimWebDevicons = { fg = colors.lavender },
 					WinSeparator = { fg = colors.lavender },
 				}
 			end,
