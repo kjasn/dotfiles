@@ -39,6 +39,7 @@ chmod +x ./install.sh
 - **PowerLevel10k**: 不喜欢 zim 官方文档的主题，所以换成了 PowerLevel10k
 - **Tmux**: 好用，窗口多开（虽然通常终端都自带了，但是 tmux 可以搭配 `vim-navigator` 插件切换光标的位置），detach 后也能继续任务
 - **Homebrew**: 必装
+- **mise**: 管理 Go、Node、Python 等运行时依赖
 - 终端模拟器：
   - `ghostty`，毛玻璃背景，光标修改为蕾姆发色(#96C4FE)，字体为`Monaco`和`Maple Mono NF CN`
   - `Kitty`: 可选配置文件 `shell/kitty/kitty.conf`、`shell/kitty/current-theme.conf`
@@ -53,6 +54,7 @@ chmod +x ./install.sh
 
 - Homebrew (如果未安装)
 - Git, Zsh, Curl, Fzf, Ripgrep, fd
+- mise，并可选安装 `mise/config.toml` 中声明的 Go、Node、Python
 - 最新版 Neovim
 - Zim Zsh 框架
 - Tmux 插件管理器 (TPM)
@@ -78,6 +80,7 @@ chmod +x ./install.sh
 ├── install.sh      # 安装脚本
 ├── uninstall.sh    # 卸载脚本
 ├── shell/          # shell 配置 (.zshrc, .zimrc，ghostty_config，kitty/)
+├── mise/           # mise 运行时依赖配置
 ├── nvim/           # LazyVim 配置
 ├── git/            # Git 配置
 ├── tmux/           # Tmux 配置
@@ -103,6 +106,11 @@ chmod +x ./install.sh
 - **历史搜索**: 上下箭头搜索历史
 - **自动建议**: 智能命令建议
 - **快速跳转**：安装了 zoxide，可以通过 `z` 命令快速跳转
+- **运行时管理**：通过 `mise activate zsh` 启用 mise
+
+### mise
+
+`mise/config.toml` 当前声明 Go、Node、Python。安装脚本会把它链接到 `~/.config/mise/config.toml`，并询问是否执行 `mise install` 安装这些运行时依赖。
 
 ### Tmux
 

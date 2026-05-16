@@ -21,7 +21,7 @@ restore_backups() {
   echo -e "\n${GREEN}=== 恢复备份文件 ===${NC}"
   
   # 查找并恢复备份文件
-  for backup_file in ~/.zshrc.bak.* ~/.gitconfig.bak.* ~/.tmux.conf.bak.* ~/.config/nvim.bak.* ~/.config/aerospace/aerospace.toml.bak.* ~/.config/ghostty/config.bak.* ~/.config/kitty/kitty.conf.bak.* ~/.config/kitty/current-theme.conf.bak.*; do
+  for backup_file in ~/.zshrc.bak.* ~/.gitconfig.bak.* ~/.tmux.conf.bak.* ~/.config/nvim.bak.* ~/.config/aerospace/aerospace.toml.bak.* ~/.config/ghostty/config.bak.* ~/.config/kitty/kitty.conf.bak.* ~/.config/kitty/current-theme.conf.bak.* ~/.config/mise/config.toml.bak.*; do
     if [ -e "$backup_file" ]; then
       original_file="${backup_file%.bak.*}"
       echo -e "${YELLOW}恢复备份: $backup_file -> $original_file${NC}"
@@ -53,6 +53,11 @@ remove_symlinks() {
   if [ -L ~/.config/nvim ]; then
     echo -e "${YELLOW}删除符号链接: ~/.config/nvim${NC}"
     rm ~/.config/nvim
+  fi
+
+  if [ -L ~/.config/mise/config.toml ]; then
+    echo -e "${YELLOW}删除符号链接: ~/.config/mise/config.toml${NC}"
+    rm ~/.config/mise/config.toml
   fi
 
   if [ -L ~/.config/aerospace/aerospace.toml ]; then
@@ -101,11 +106,11 @@ uninstall_fonts() {
 uninstall_homebrew_packages() {
   echo -e "\n${GREEN}=== 卸载 Homebrew 包（可选） ===${NC}"
   
-  read -r -p "是否卸载通过 Homebrew 安装的包 (tmux, zoxide, fzf, ripgrep, fd)? [y/N] " yn
+  read -r -p "是否卸载通过 Homebrew 安装的包 (tmux, zoxide, fzf, ripgrep, fd, mise)? [y/N] " yn
   case "$yn" in
     [Yy]* )
       echo -e "${YELLOW}卸载 Homebrew 包...${NC}"
-      brew uninstall tmux zoxide fzf ripgrep fd 2>/dev/null || true
+      brew uninstall tmux zoxide fzf ripgrep fd mise 2>/dev/null || true
       ;;
     * )
       echo -e "${YELLOW}跳过 Homebrew 包卸载${NC}"
