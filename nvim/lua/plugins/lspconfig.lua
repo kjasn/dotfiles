@@ -9,8 +9,10 @@ return {
 		opts = {
 			-- Configure the servers that will be set up
 			servers = {
+				buf_ls = {}, -- reads buf.yaml, resolves proto imports correctly
 				-- gopls will be automatically installed with mason and loaded with lspconfig
 				gopls = {
+					capabilities = vim.lsp.protocol.make_client_capabilities(),
 					settings = {
 						gopls = {
 							-- Enable gofumpt instead of gofmt
@@ -31,6 +33,12 @@ return {
 						},
 					},
 				},
+			},
+			setup = {
+				gopls = function()
+					-- Disable LazyVim's gopls semantic-token shim, which is incompatible
+					-- with Neovim 0.12's semantic token decoder.
+				end,
 			},
 		},
 	},

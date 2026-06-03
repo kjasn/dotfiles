@@ -20,7 +20,5 @@ opt.foldtext = ""
 opt.foldcolumn = "0"
 opt.foldlevelstart = 99
 
+opt.smoothscroll = true
 opt.laststatus = 3
-
--- Reduce LSP log verbosity to avoid huge logs
-vim.lsp.set_log_level("WARN")

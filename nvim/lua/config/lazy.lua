@@ -38,19 +38,19 @@ require("lazy").setup({
 	rocks = {
 		enabled = false,
 	},
-	performance = {
-		rtp = {
-			-- disable some rtp plugins
-			disabled_plugins = {
-				"gzip",
-				-- "matchit",
-				-- "matchparen",
-				-- "netrwPlugin",
-				"tarPlugin",
-				"tohtml",
-				"tutor",
-				"zipPlugin",
-			},
-		},
-	},
+	-- performance = {
+	-- 	rtp = {
+	-- 		-- disable some rtp plugins
+	-- 		disabled_plugins = {
+	-- 			"gzip",
+	-- 			-- "matchit",
+	-- 			-- "matchparen",
+	-- 			-- "netrwPlugin",
+	-- 			"tarPlugin",
+	-- 			"tohtml",
+	-- 			"tutor",
+	-- 			"zipPlugin",
+	-- 		},
+	-- 	},
+	-- },
 })
