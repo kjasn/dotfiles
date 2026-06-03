@@ -182,7 +182,7 @@ export HOMEBREW_AUTO_UPDATE_SECS=5184000
 alias lzd='lazydocker'
 
 # rust
-# export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 
 
@@ -191,7 +191,7 @@ alias lzd='lazydocker'
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-# export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 eval "$(mise activate zsh)"
 
@@ -199,3 +199,4 @@ eval "$(mise activate zsh)"
 typeset -U PATH
 
 
+export OLLAMA_ORIGINS=*
