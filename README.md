@@ -6,6 +6,17 @@
 
 ---
 
+> [!WARNING]
+>
+> 开始之前请注意该配置具有一定侵入性，建议先阅读 `install.sh` 和 `uninstall.sh` 再执行。
+>
+> - 安装脚本会在 `$HOME` 和 `~/.config` 下创建多个符号链接，例如 Zsh、Tmux、Neovim、mise、
+>   Kitty、Yazi、AeroSpace 等配置。
+> - 如果目标路径已存在，脚本会按 `.bak.<timestamp>` 格式备份原文件或目录后再替换，但仍建议先手动确认重要配置已经备份。
+> - 脚本会通过 Homebrew 安装或升级部分工具，并可能改动默认 shell、安装 Zim、
+>   同步 LazyVim 插件、安装 Tmux 插件、执行 `mise install` 等操作。
+> - 如果只想复用某个组件，建议不要直接运行完整安装脚本，而是复制对应目录或只执行相关配置的部署步骤。
+
 ## 🚀 快速开始
 
 ```bash
@@ -16,7 +27,7 @@ cd ~/dotfiles
 # 切换到对应系统的分支(Linux dotfiles 文件暂不维护)
 git checkout dot/MacOS
 
-# 运行安装脚本
+# 运行安装脚本 脚本具有幂等性，可以多次执行
 chmod +x ./install.sh
 ./install.sh
 ```
@@ -39,7 +50,8 @@ chmod +x ./install.sh
 - **PowerLevel10k**: 不喜欢 zim 官方文档的主题，所以换成了 PowerLevel10k
 - **Tmux**: 好用，窗口多开（虽然通常终端都自带了，但是 tmux 可以搭配 `vim-navigator` 插件切换光标的位置），detach 后也能继续任务
 - **Homebrew**: 必装
-- **mise**: 管理 Go、Node、Python 等运行时依赖
+- **mise**: 管理 Go、Node、Python、Rust 等运行时依赖
+- **Yazi**: TUI file manager，包含插件 `path-from-root`，便于复制文件路径，可选部署 `yazi/` 配置
 - 终端模拟器：
   - `ghostty`，毛玻璃背景，光标修改为蕾姆发色(#96C4FE)，字体为`Monaco`和`Maple Mono NF CN`
   - `Kitty`: 可选配置文件 `shell/kitty/kitty.conf`、`shell/kitty/current-theme.conf`
@@ -61,15 +73,7 @@ chmod +x ./install.sh
 - Aerospace 窗口管理器（可选）
 - borders (AeroSpace 边框工具，可选)
 - Kitty 配置（可选）
-
-### 实用脚本
-
-- **git-sync.sh**: Git 上游同步脚本，用于同步 fork 仓库的上游更新
-  - 使用方法: `./scripts/git-sync.sh [master|main]`
-  - 如需全局使用，可复制到 `/usr/local/bin/` 目录
-- **upload-file-to-server.sh**: 服务器文件上传脚本，使用固定 SSH 密钥快速上传文件
-  - 使用方法: `./scripts/upload-file-to-server.sh <本地路径> <远程路径>`
-  - 使用前需要配置脚本中的服务器信息和 SSH 密钥路径
+- Yazi 及其配置（可选）
 
 ---
 
@@ -81,12 +85,10 @@ chmod +x ./install.sh
 ├── uninstall.sh    # 卸载脚本
 ├── shell/          # shell 配置 (.zshrc, .zimrc，ghostty_config，kitty/)
 ├── mise/           # mise 运行时依赖配置
+├── yazi/           # Yazi 文件管理器配置
 ├── nvim/           # LazyVim 配置
 ├── git/            # Git 配置
 ├── tmux/           # Tmux 配置
-├── scripts/        # 实用脚本
-│   ├── git-sync.sh # Git 上游同步脚本
-│   └── upload-stage-server.sh # 服务器文件上传脚本
 └── README.md       # 说明文档
 ```
 
@@ -94,7 +96,7 @@ chmod +x ./install.sh
 
 ### Neovim (LazyVim)
 
-- **LSP 支持**: Go、Python、TypeScript、React
+- **LSP 支持**: Go、Python、Rust、TypeScript、React
 - **格式化**: 自动代码格式化(半自动吧)
 - **文件树**: MiniFiles 文件管理器
 - **搜索**: fzf 模糊搜索
@@ -110,7 +112,13 @@ chmod +x ./install.sh
 
 ### mise
 
-`mise/config.toml` 当前声明 Go、Node、Python。安装脚本会把它链接到 `~/.config/mise/config.toml`，并询问是否执行 `mise install` 安装这些运行时依赖。
+`mise/config.toml` 当前声明 Go、Node、Python、Rust。安装脚本会把它链接到 `~/.config/mise/config.toml`，
+并询问是否执行 `mise install` 安装这些运行时依赖。
+
+### Yazi
+
+`yazi/` 当前包含 `package.toml` 和 `keymap.toml`，安装脚本可选将目录链接到 `~/.config/yazi`。
+当前快捷键 `c r` 会调用 `path-from-root` 插件复制 Git 根目录相对路径。
 
 ### Tmux
 
@@ -171,53 +179,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # 示例：修改前缀键
 set -g prefix C-b
 ```
-
-## 📜 脚本使用
-
-### git-sync.sh
-
-用于同步 fork 仓库的上游更新：
-
-```bash
-# 在 dotfiles 目录中使用
-./scripts/git-sync.sh main
-
-# 如需全局使用，复制到系统路径
-sudo cp scripts/git-sync.sh /usr/local/bin/git-sync
-sudo chmod +x /usr/local/bin/git-sync
-
-# 然后在任何 Git 仓库中使用
-git-sync main
-```
-
-**使用前准备**：
-
-1. 确保已配置 upstream 远程仓库：`git remote add upstream <原仓库URL>`
-2. 脚本会自动备份当前分支状态
-3. 支持 master 和 main 分支
-
-### upload-stage-server.sh
-
-用于快速上传文件到远程服务器：
-
-```bash
-# 在 dotfiles 目录中使用
-./scripts/upload-stage-server.sh ./my_project /var/www/html/
-
-# 如需全局使用，复制到系统路径
-sudo cp scripts/upload-stage-server.sh /usr/local/bin/upload-stage-server
-sudo chmod +x /usr/local/bin/upload-stage-server
-
-# 然后在任何地方使用
-upload-stage-server ./my_project /var/www/html/
-```
-
-**使用前准备**：
-
-1. 编辑脚本配置服务器信息：`REMOTE_USER`、`REMOTE_HOST`、`REMOTE_PORT`
-2. 配置 SSH 密钥路径：`SSH_KEY_PATH`
-3. 确保 SSH 密钥有访问服务器的权限
-4. 脚本会自动检查远程文件是否存在，避免意外覆盖
 
 ## PowerLevel10k 主题配置
 
