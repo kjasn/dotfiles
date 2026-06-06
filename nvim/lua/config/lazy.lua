@@ -19,26 +19,7 @@ require("lazy").setup({
 		-- add LazyVim and import its plugins
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins" },
 		-- import/override with your plugins
-		{ import = "lazyvim.plugins.extras.linting.eslint" },
-		{ import = "lazyvim.plugins.extras.formatting.prettier" },
 		{ import = "plugins" },
-		{
-			"lewis6991/gitsigns.nvim",
-			config = function()
-				require("gitsigns").setup({
-					current_line_blame = true, -- Enable inline Git blame
-				})
-			end,
-		},
-	},
-	extras = {
-		"lazyvim.plugins.extras.lang.go",
-		"lazyvim.plugins.extras.lang.python",
-		"lazyvim.plugins.extras.lang.typescript",
-		"lazyvim.plugins.extras.lang.react",
-		"lazyvim.plugins.extras.lang.json",
-		-- "lazyvim.plugins.extras.lang.vue",
-		-- "lazyvim.plugins.extras.lang.css",
 	},
 	defaults = {
 		-- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -54,19 +35,22 @@ require("lazy").setup({
 		enabled = true, -- check for plugin updates periodically
 		notify = false, -- notify on update
 	}, -- automatically check for plugin updates
-	performance = {
-		rtp = {
-			-- disable some rtp plugins
-			disabled_plugins = {
-				"gzip",
-				-- "matchit",
-				-- "matchparen",
-				-- "netrwPlugin",
-				"tarPlugin",
-				"tohtml",
-				"tutor",
-				"zipPlugin",
-			},
-		},
+	rocks = {
+		enabled = false,
 	},
+	-- performance = {
+	-- 	rtp = {
+	-- 		-- disable some rtp plugins
+	-- 		disabled_plugins = {
+	-- 			"gzip",
+	-- 			-- "matchit",
+	-- 			-- "matchparen",
+	-- 			-- "netrwPlugin",
+	-- 			"tarPlugin",
+	-- 			"tohtml",
+	-- 			"tutor",
+	-- 			"zipPlugin",
+	-- 		},
+	-- 	},
+	-- },
 })
