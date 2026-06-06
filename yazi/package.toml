@@ -1,0 +1,7 @@
+[[plugin.deps]]
+use = "aresler/path-from-root"
+rev = "3daa62f"
+hash = "f3375d21ceb5f49d2d50ad199262006a"
+
+[flavor]
+deps = []

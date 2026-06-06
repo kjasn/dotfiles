@@ -198,6 +198,45 @@ install_lazygit() {
     esac
 }
 
+# 可选安装 Yazi 并部署配置
+install_yazi() {
+    echo -e "\n${GREEN}=== 可选：安装 Yazi ===${NC}"
+    read -r -p "是否安装 Yazi? [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        if ! command -v yazi >/dev/null 2>&1; then
+            echo -e "${YELLOW}通过 Homebrew 安装 Yazi...${NC}"
+            if brew install yazi; then
+                echo -e "${GREEN}Yazi 安装完成${NC}"
+            else
+                echo -e "${RED}Yazi 安装失败${NC}"
+            fi
+        else
+            echo -e "${GREEN}Yazi 已安装${NC}"
+        fi
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 Yazi 安装${NC}"
+        ;;
+    esac
+
+    local repo_conf="$HOME/dotfiles/yazi"
+    if [ ! -d "$repo_conf" ]; then
+        echo -e "${YELLOW}警告：仓库中未找到 $repo_conf，跳过 Yazi 配置部署${NC}"
+        return 0
+    fi
+
+    read -r -p "是否将仓库的 Yazi 配置部署到 ~/.config/yazi ？ [y/N] " yn
+    case "$yn" in
+    [Yy]*)
+        create_symlink "$repo_conf" "$HOME/.config/yazi"
+        ;;
+    *)
+        echo -e "${YELLOW}已跳过 Yazi 配置部署${NC}"
+        ;;
+    esac
+}
+
 # 安装（或更新）LazyVim 插件集
 install_lazyvim() {
     echo -e "\n${GREEN}=== 安装/更新 LazyVim 插件 ===${NC}"
@@ -532,6 +571,7 @@ verify_installation() {
     local optional_symlinks=(
         "$HOME/.config/kitty/kitty.conf:$HOME/dotfiles/shell/kitty/kitty.conf"
         "$HOME/.config/kitty/current-theme.conf:$HOME/dotfiles/shell/kitty/current-theme.conf"
+        "$HOME/.config/yazi:$HOME/dotfiles/yazi"
     )
 
     for symlink_info in "${symlinks[@]}"; do
@@ -610,6 +650,9 @@ main() {
 
     # 安装 lazygit （可选）
     install_lazygit
+
+    # 安装 Yazi （可选）
+    install_yazi
 
     # 可选：部署 Ghostty 配置
     install_ghostty_config
