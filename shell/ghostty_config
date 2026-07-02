@@ -13,8 +13,8 @@ grapheme-width-method = "unicode"
 # 不调整单元格宽度，避免显示问题
 adjust-cell-width = 0%
 
-# 光标修改为 蕾姆(Rem) 发色
-cursor-color = 96C4FE
+# use Saki's signature color
+cursor-color = #7799CC
 
 # cursor-style = "bar"
 # cursor-style-blink = true

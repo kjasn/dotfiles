@@ -53,10 +53,8 @@ chmod +x ./install.sh
 - **mise**: 管理 Go、Node、Python、Rust 等运行时依赖
 - **Yazi**: TUI file manager，包含插件 `path-from-root`，便于复制文件路径，可选部署 `yazi/` 配置
 - 终端模拟器：
-  - `ghostty`，毛玻璃背景，光标修改为蕾姆发色(#96C4FE)，字体为`Monaco`和`Maple Mono NF CN`
+  - `ghostty`，毛玻璃背景，光标修改为丰川祥子的代表色(#7799CC)，字体为`Monaco`和`Maple Mono NF CN`
   - `Kitty`: 可选配置文件 `shell/kitty/kitty.conf`、`shell/kitty/current-theme.conf`
-
-> 官方设定为水蓝色（#66FFE6)，与动漫中色差过大，故没有选用
 
 ---
 
