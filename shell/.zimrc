@@ -37,28 +37,25 @@ zmodule archive
 zmodule zsh-users/zsh-completions --fpath src
 # Enables and configures smart and extensive tab completion.
 # completion must be sourced after all modules that add completion definitions.
-# zmodule completion
-
-# Fish-like syntax highlighting for Zsh.
-# Load before zsh-autocomplete so it does not try to wrap autocomplete's
-# special ZLE widgets such as menu-search and recent-paths.
-# zmodule zsh-users/zsh-syntax-highlighting
-zmodule zdharma-continuum/fast-syntax-highlighting
-
-zmodule marlonrichert/zsh-autocomplete
+zmodule completion
 
 #
 # Modules that must be initialized last
 #
+
+# Fish-like syntax highlighting for Zsh.
+# zsh-users/zsh-syntax-highlighting must be sourced after completion
+# zmodule zsh-users/zsh-syntax-highlighting
+zmodule zdharma-continuum/fast-syntax-highlighting
+# Fish-like history search (up arrow) for Zsh.
+# zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-history-substring-search
+# Fish-like autosuggestions for Zsh.
+zmodule zsh-users/zsh-autosuggestions
 # }}} End configuration added by Zim install
 # zmodule agkozak/zsh-z  # Replaced by zoxide, a faster alternative
 # zmodule ajeetdsouza/zoxide  
-# zsh-autocomplete already provides history menus, recent path completion, and
-# completion menu selection. Loading history-substring-search, autosuggestions,
-# or fzf-tab with it can wrap the same ZLE widgets and produce startup output.
-# zmodule zsh-users/zsh-history-substring-search
-# zmodule zsh-users/zsh-autosuggestions
-# zmodule Aloxaf/fzf-tab
+zmodule Aloxaf/fzf-tab
 
 # Theme - PowerLevel10k
 # 使用 PowerLevel10k 主题，功能强大且高度可定制
