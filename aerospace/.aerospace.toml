@@ -61,9 +61,9 @@ on-mode-changed = []
 if.app-id = "com.TablePro"
 run = "layout floating"
 
-[[on-window-detected]]
-if.app-id = "com.openai.codex"
-run = "layout floating"
+# [[on-window-detected]]
+# if.app-id = "com.openai.codex"
+# run = "layout floating"
 
 [[on-window-detected]]
 if.app-id = "com.tencent.qq"
@@ -367,7 +367,7 @@ alt-a = "workspace A"  # In your config, you can drop workspace bindings that yo
 # alt-c = 'workspace C'
 alt-d = "workspace D"
 # alt-e = 'workspace E'
-# alt-f = "workspace F"
+alt-f = "workspace F"
 # alt-g = 'workspace G'
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'

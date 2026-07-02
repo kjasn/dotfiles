@@ -1,5 +1,7 @@
 [tools]
 go = "1.26"
+golangci-lint = "2.12.2"
+
 node = "25.9"
 python = "3.14"
 rust = "1.96"
