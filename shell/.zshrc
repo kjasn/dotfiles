@@ -91,16 +91,17 @@ WORDCHARS=${WORDCHARS//[\/]}
 #zstyle ':zim:termtitle' format '%1~'
 
 #
-# zsh-autosuggestions
+# zsh-autocomplete
 #
 
-# Disable automatic widget re-binding on each precmd. This can be set when
-# zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc.
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+# Show matching history entries as soon as a new command line is typed.
+zstyle ':autocomplete:*' default-context history-incremental-search-backward
 
-# Customize the style that the suggestions are shown with.
-# See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
-#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+# Do not open the history menu on an empty prompt.
+zstyle ':autocomplete:*' min-input 1
+
+# Keep accepted history entries as plain commands instead of appending ';'.
+zstyle ':autocomplete:*' add-semicolon no
 
 #
 # zsh-syntax-highlighting
@@ -137,6 +138,14 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+# Keep Ctrl-N/Ctrl-P usable with zsh-autocomplete while using vi keymaps.
+if (( ${+widgets[down-line-or-select]} && ${+widgets[up-line-or-search]} )); then
+  bindkey -M main '^N' down-line-or-select
+  bindkey -M main '^P' up-line-or-search
+  bindkey -M viins '^N' down-line-or-select
+  bindkey -M viins '^P' up-line-or-search
+fi
+
 # ------------------------------
 # Post-init module configuration
 # ------------------------------
@@ -146,12 +155,14 @@ source ${ZIM_HOME}/init.zsh
 #
 
 zmodload -F zsh/terminfo +p:terminfo
-# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
-for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
-for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
-for key ('k') bindkey -M vicmd ${key} history-substring-search-up
-for key ('j') bindkey -M vicmd ${key} history-substring-search-down
-unset key
+if (( ${+widgets[history-substring-search-up]} )); then
+  # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
+  for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
+  for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
+  for key ('k') bindkey -M vicmd ${key} history-substring-search-up
+  for key ('j') bindkey -M vicmd ${key} history-substring-search-down
+  unset key
+fi
 # }}} End configuration added by Zim install
 
 
