@@ -4,6 +4,10 @@
 
 local opt = vim.opt
 
+-- Prefer the Git repo root for LazyVim pickers in monorepos.
+-- The default checks LSP first, which can stop at frontend/package.json.
+vim.g.root_spec = { { ".git", "lua" }, "lsp", "cwd" }
+
 -- 缩进配置 (LazyVim 默认是 2)
 opt.tabstop = 4 -- Tab 占 4 个空格
 opt.shiftwidth = 4 -- 缩进使用 4 个空格
