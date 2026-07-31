@@ -5,9 +5,9 @@ config-version = 2
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  # JankyBorders has a built-in detection of already running process,
-  # so it won't be run twice on AeroSpace restart
-  "exec-and-forget borders active_color=0xffffe600 inactive_color=0xff494d64 width=5.0",
+    # JankyBorders has a built-in detection of already running process,
+    # so it won't be run twice on AeroSpace restart
+    "exec-and-forget borders active_color=0xffffe600 inactive_color=0xff494d64 width=5.0",
 ]
 
 # Start AeroSpace at login
@@ -59,6 +59,10 @@ on-mode-changed = []
 # Float specified apps so they don't affect tiling layout
 [[on-window-detected]]
 if.app-id = "com.TablePro"
+run = "layout floating"
+
+[[on-window-detected]]
+if.app-id = "com.dbx.app"
 run = "layout floating"
 
 # [[on-window-detected]]
@@ -201,8 +205,9 @@ run = "layout floating"
 if.app-id = "co.macsvn.macsvn.macSvn"
 run = "layout floating"
 
+# OrbStack
 [[on-window-detected]]
-if.app-id = "dev.kdrag0n.MacVirt"  # OrbStack
+if.app-id = "dev.kdrag0n.MacVirt"
 run = "layout floating"
 
 [[on-window-detected]]
@@ -285,20 +290,22 @@ preset = "qwerty"
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 10
+inner.horizontal = 20
 inner.vertical = 10
-outer.left = 5
+outer.left = 10
 outer.bottom = 5
 outer.top = 5
-outer.right = 5
+outer.right = 10
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
-cmd-h = []  # Disable "hide application"
-cmd-alt-h = []  # Disable "hide others"
+# Disable "hide application"
+cmd-h = []
+# Disable "hide others"
+cmd-alt-h = []
 alt-v = []
 alt-m = "fullscreen"
 alt-shift-u = "join-with left"
@@ -362,7 +369,7 @@ alt-equal = "resize smart +50"
 # alt-7 = 'workspace 7'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
-alt-a = "workspace A"  # In your config, you can drop workspace bindings that you don't need
+alt-a = "workspace A"
 # alt-b = 'workspace B'
 # alt-c = 'workspace C'
 alt-d = "workspace D"
@@ -430,11 +437,10 @@ alt-shift-semicolon = "mode service"
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 esc = ["reload-config", "mode main"]
-r = ["flatten-workspace-tree", "mode main"]  # reset layout
-f = [
-  "layout floating tiling",
-  "mode main",
-]  # Toggle between floating and tiling layout
+# reset layout
+r = ["flatten-workspace-tree", "mode main"]
+# Toggle between floating and tiling layout
+f = ["layout floating tiling", "mode main"]
 backspace = ["close-all-windows-but-current", "mode main"]
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2

@@ -13,9 +13,6 @@ fi
 # config dir
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# go
-# export PATH="$(go env GOPATH)/bin:${PATH}"
-
 # zoxide - smart cd command
 eval "$(zoxide init zsh)"
 
@@ -183,15 +180,6 @@ alias lzd='lazydocker'
 
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"
-
-
-
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 
 eval "$(mise activate zsh)"
 
