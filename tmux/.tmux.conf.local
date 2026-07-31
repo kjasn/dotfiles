@@ -536,7 +536,8 @@ set -g @plugin 'christoomey/vim-tmux-navigator'
 set -g @resurrect-capture-pane-contents 'on'
 set -g @continuum-restore 'on'
 
-#
+set -g extended-keys on
+set -g extended-keys-format csi-u
 # "$@"
 # # /!\ do not remove the previous line
 # #     do not write below this line
