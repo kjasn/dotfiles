@@ -1,7 +1,7 @@
 {
   "LazyVim": {
     "branch": "main",
-    "commit": "83d90f339defdb109a6ede333865a66ffc7ef6aa"
+    "commit": "c10948c50b18fae7f256433afdef09e432410480"
   },
   "SchemaStore.nvim": {
     "branch": "main",
@@ -50,6 +50,10 @@
   "gitsigns.nvim": {
     "branch": "main",
     "commit": "dd3f588bacbeb041be6facf1742e42097f62165d"
+  },
+  "goplements.nvim": {
+    "branch": "main",
+    "commit": "1750ace64d42efcbc1ce36eef848a3cea5f88c79"
   },
   "grug-far.nvim": {
     "branch": "main",
@@ -198,6 +202,10 @@
   "ts-comments.nvim": {
     "branch": "main",
     "commit": "123a9fb12e7229342f807ec9e6de478b1102b041"
+  },
+  "venv-selector.nvim": {
+    "branch": "main",
+    "commit": "a46c77978abc1aa1b3e17918d964bd30287abb42"
   },
   "vim-tmux-navigator": {
     "branch": "master",
