@@ -12,12 +12,25 @@ vim.g.root_spec = { { ".git" }, "lsp", "cwd" }
 opt.tabstop = 4 -- Tab 占 4 个空格
 opt.shiftwidth = 4 -- 缩进使用 4 个空格
 opt.softtabstop = 4 -- 退格键删除 4 个空格
+opt.expandtab = true -- 将 Tab 转换为空格
 
 -- 文本显示
 opt.wrap = true -- 启用自动换行
+
+-- Allow enough time to enter multi-key mappings such as <leader> sequences and "kj".
+opt.timeoutlen = 1000
 
 -- Keep folds open by default; let LazyVim choose the guarded foldexpr.
 opt.foldlevel = 99
 opt.foldtext = ""
 opt.foldcolumn = "0"
 opt.foldlevelstart = 99
+
+-- Disable spell checking for markdown and text files
+-- Mainly for Chinese characters
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "markdown", "txt" },
+	callback = function()
+		vim.opt_local.spell = false
+	end,
+})
