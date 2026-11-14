@@ -4,9 +4,25 @@ return {
 		local function staged_file_color()
 			vim.api.nvim_set_hl(0, "GitSignsDiffStaged", { link = "GitSignsAdd" })
 		end
+		local saved_timeoutlen
+		local function enter_diff_panel()
+			if vim.bo.filetype == "gitsigns-diff" and not saved_timeoutlen then
+				-- Space is also leader, so its panel mapping still waits for timeoutlen.
+				saved_timeoutlen = vim.o.timeoutlen
+				vim.o.timeoutlen = 150
+			end
+		end
+		local function leave_diff_panel()
+			if vim.bo.filetype == "gitsigns-diff" and saved_timeoutlen then
+				vim.o.timeoutlen = saved_timeoutlen
+				saved_timeoutlen = nil
+			end
+		end
 
 		staged_file_color()
 		vim.api.nvim_create_autocmd("ColorScheme", { callback = staged_file_color })
+		vim.api.nvim_create_autocmd("WinEnter", { callback = enter_diff_panel })
+		vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, { callback = leave_diff_panel })
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = "gitsigns-diff",
 			callback = function(args)
@@ -28,6 +44,7 @@ return {
 							})
 						end
 					end
+					enter_diff_panel()
 				end)
 			end,
 		})
