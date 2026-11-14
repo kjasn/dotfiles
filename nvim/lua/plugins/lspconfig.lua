@@ -7,6 +7,7 @@ return {
 			"mason-lspconfig.nvim",
 		},
 		opts = {
+			folds = { enabled = false },
 			-- Configure the servers that will be set up
 			servers = {
 				buf_ls = {}, -- reads buf.yaml, resolves proto imports correctly
