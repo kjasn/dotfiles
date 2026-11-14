@@ -179,25 +179,6 @@ install_aerospace() {
     esac
 }
 
-# 可选安装 lazygit
-install_lazygit() {
-    echo -e "\n${GREEN}=== 可选：安装 lazygit ===${NC}"
-    read -r -p "是否安装 lazygit? [y/N] " yn
-    case "$yn" in
-    [Yy]*)
-        echo -e "${YELLOW}通过 Homebrew 安装 lazygit...${NC}"
-        if brew install lazygit; then
-            echo -e "${GREEN}lazygit 安装完成${NC}"
-        else
-            echo -e "${RED}lazygit 安装失败${NC}"
-        fi
-        ;;
-    *)
-        echo -e "${YELLOW}已跳过 lazygit 安装${NC}"
-        ;;
-    esac
-}
-
 # 可选安装 Yazi 并部署配置
 install_yazi() {
     echo -e "\n${GREEN}=== 可选：安装 Yazi ===${NC}"
@@ -647,9 +628,6 @@ main() {
 
     # 安装 AeroSpace 与 borders
     install_aerospace
-
-    # 安装 lazygit （可选）
-    install_lazygit
 
     # 安装 Yazi （可选）
     install_yazi

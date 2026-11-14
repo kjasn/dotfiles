@@ -6,6 +6,12 @@ local opt = { noremap = true, silent = true }
 
 map.set({ "i" }, "kj", "<Esc>")
 
+vim.keymap.set("n", "<leader>gg", function()
+	require("gitsigns").diff(nil, nil, {
+		diff = "unified",
+	})
+end, { desc = "Git Diff Unified" })
+
 -- Alt + ` open terminal at buttom
 -- map.set({ "n", "i" }, "<A-`>", "<Cmd>ToggleTerm<CR>", opt)
 
