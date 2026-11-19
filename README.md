@@ -98,7 +98,7 @@ chmod +x ./install.sh
 - **格式化**: 自动代码格式化(半自动吧)
 - **文件树**: MiniFiles 文件管理器
 - **搜索**: fzf 模糊搜索
-- **Git 变更**: Gitsigns 显示变更标记和行级 blame。`<leader>gg` 打开统一 diff 面板；完全暂存的文件名为绿色，未暂存或部分暂存的文件保持原色。面板中用 `Space` 立即切换整文件或目录的暂存状态，面板内其他以 `Space` 开头的快捷键无法使用；`s` 仍用于 Flash 跳转。编辑文件时可用 `[h` / `]h` 切换变更块，`<leader>ghs` 暂存当前变更块，`<leader>ghr` 放弃当前未暂存的变更块；在可视模式中先选中若干行再按相同快捷键，可仅处理选中的行。提交、分支和推送使用 Git 命令。
+- **Diff** CodeDiff，默认使用 Tree 视图且不区分 Changes/Staged
 
 ### Zsh (Zim)
 
