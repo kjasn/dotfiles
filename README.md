@@ -71,6 +71,7 @@ chmod +x ./install.sh
 - Aerospace 窗口管理器（可选）
 - borders (AeroSpace 边框工具，可选)
 - Kitty 配置（可选）
+- LazyGit（可选）
 - Yazi 及其配置（可选）
 
 ---
@@ -98,7 +99,8 @@ chmod +x ./install.sh
 - **格式化**: 自动代码格式化(半自动吧)
 - **文件树**: MiniFiles 文件管理器
 - **搜索**: fzf 模糊搜索
-- **Diff** CodeDiff，默认使用 Tree 视图且不区分 Changes/Staged
+- **Diff** `<leader>gd` 打开 CodeDiff，默认使用 Tree 视图且不区分 Changes/Staged。
+- **Git 操作** 安装 LazyGit 后，`<leader>gg` 从 Git 根目录打开 LazyGit，`<leader>gG` 从当前工作目录打开。终端中也可以用 `lg` 打开。
 
 ### Zsh (Zim)
 
