@@ -6,7 +6,5 @@ local opt = { noremap = true, silent = true }
 
 map.set({ "i" }, "kj", "<Esc>")
 
-map.set("n", "<leader>gd", "<Cmd>CodeDiff<CR>", { desc = "Review Git Changes (CodeDiff)" })
-
 -- Alt + \ open terminal right bar
 -- map.set({ "n", "i" }, "<A-\\>", "<Cmd>ToggleTerm size=50 direction=vertical<CR>", opt)
