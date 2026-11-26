@@ -18,6 +18,9 @@ return {
 			{ "<leader>gd", "<cmd>CodeDiff<cr>", desc = "Review Git Changes (CodeDiff)" },
 		},
 		opts = {
+			explorer = {
+				view_mode = "tree",
+			},
 			keymaps = {
 				view = {
 					focus_explorer = false,
