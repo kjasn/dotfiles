@@ -143,6 +143,22 @@ uninstall_homebrew_packages() {
         ;;
     esac
 
+    if brew list --versions lazygit >/dev/null 2>&1; then
+        read -r -p "是否卸载 LazyGit? [y/N] " yn
+        case "$yn" in
+        [Yy]*)
+            if brew uninstall lazygit; then
+                echo -e "${GREEN}LazyGit 卸载完成${NC}"
+            else
+                echo -e "${RED}LazyGit 卸载失败${NC}"
+            fi
+            ;;
+        *)
+            echo -e "${YELLOW}已跳过 LazyGit 卸载${NC}"
+            ;;
+        esac
+    fi
+
     read -r -p "是否卸载 Yazi? [y/N] " yn
     case "$yn" in
     [Yy]*)
